@@ -68,6 +68,80 @@ exports['rest'] = {
 
         });
     });
-  }
+  },
+
+  'delete-node': function(test) {
+    test.expect(5);
+
+    landcaster(config, function(server){
+      // create
+      http.post(
+        test, 
+        'nodes', {
+          data:{
+            'id': 'test-node'
+          }
+        }, {
+          status: 204
+        }, function(res) {
+
+          http.del(
+            test, 
+            'nodes/test-node', 
+            {},
+            {status: 204},
+            function(res) {
+
+              http.get( test, 'nodes', function(res) {
+                test.equal(typeof res.data, 'object');
+                test.equal(res.data.hasOwnProperty('test-node'), false);
+                server.stop(function(){
+                  test.done();
+                });
+              });
+            });
+
+        });
+    });
+  },
+
+  'inject': function(test) {
+    test.expect(5);
+    landcaster(config, function(server){
+
+      http.post(
+        test, 
+        'nodes', 
+        {data:{'id': 'test-node'}},
+        {status: 204}, 
+        function(res) {
+
+          var myMessage = {value: 1000.00};
+
+          http.post(
+            test, 
+            'nodes/test-node/message', 
+            {data: myMessage},
+            {status: 204}, 
+            function(res) {
+              
+              // get val
+              http.get(
+                test, 
+                'nodes/test-node', 
+                function(res) {
+                  test.equal(typeof res.data, 'object');
+                  // should have latched most recent processed message
+                  test.deepEqual(res.data.val, myMessage);                
+                  server.stop(function(){
+                    test.done();
+                  });
+                });
+              
+            });
+        });
+
+    });
+  },
 
 };
