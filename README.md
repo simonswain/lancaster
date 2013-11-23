@@ -27,7 +27,7 @@ node server
 
 ## Release History
 
-* 10/11/2013 0.0.1 Initial release
+* 23/11/2013 0.0.1 Initial release
 
 ## License
 Copyright (c) 2013 Simon Swain
