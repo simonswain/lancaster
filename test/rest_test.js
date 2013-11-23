@@ -30,6 +30,44 @@ exports['rest'] = {
         });
       });
     });
+  },
+
+  'inspect': function(test) {
+    test.expect(2);
+    landcaster(config, function(server){
+      http.get( test, 'nodes', function(res) {
+        test.equal(typeof res.data, 'object');
+        server.stop(function(){
+          test.done();
+        });
+      });
+    });
+  },
+
+  'create-node': function(test) {
+    test.expect(4);
+    landcaster(config, function(server){
+      http.post(
+        test, 
+        'nodes', {
+          data:{
+            'id': 'test-node'
+          }
+        }, {
+          status: 204
+        }, function(res) {
+
+          // inpsect to check nodes were created
+          http.get( test, 'nodes', function(res) {
+            test.equal(typeof res.data, 'object');
+            test.ok(res.data.hasOwnProperty('test-node'));
+            server.stop(function(){
+              test.done();
+            });
+          });
+
+        });
+    });
   }
 
 };
