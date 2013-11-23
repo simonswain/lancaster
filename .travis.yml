@@ -5,3 +5,4 @@ services:
   - redis-server
 before_script:
   - npm install -g grunt-cli
+  - cp config.sample.js config.js
