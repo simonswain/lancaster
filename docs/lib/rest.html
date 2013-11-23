@@ -87,17 +87,7 @@
 
   app.use(clientErrorHandler);
 
-  app.use(app.router);
-
-  app.get (
-    <span class="string">'/ping'</span>,
-    <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> {</span>
-      res.send(<span class="number">200</span>, {pong: <span class="keyword">new</span> Date().getTime()});
-    });
-
-  <span class="keyword">var</span> start = <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
-    <span class="keyword">var</span> listen;
-    <span class="keyword">if</span>(app.config.listen){</pre></div></div>
+  app.use(app.router);</pre></div></div>
             
         </li>
         
@@ -108,11 +98,31 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>listen on unix socket for nginx</p>
+              <p>REST methods</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      listen = app.config.listen;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>
+  app.get (
+    <span class="string">'/ping'</span>,
+    <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> {</span>
+      res.send(<span class="number">200</span>, {pong: <span class="keyword">new</span> Date().getTime()});
+    });
+
+
+  app.get (
+    <span class="string">'/nodes'</span>,
+    <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> {</span>
+      res.send(<span class="number">200</span>, topology.inspect());
+    });
+  
+
+
+
+
+  <span class="keyword">var</span> start = <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
+    <span class="keyword">var</span> listen;
+    <span class="keyword">if</span>(app.config.listen){</pre></div></div>
             
         </li>
         
@@ -122,6 +132,21 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>listen on unix socket for nginx</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      listen = app.config.listen;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>remove stale socket</p>
 
@@ -133,11 +158,11 @@
         </li>
         
         
-        <li id="section-5">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>listen on localhost:port</p>
 
@@ -154,11 +179,11 @@
         </li>
         
         
-        <li id="section-6">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>ensure nginx can access the socket</p>
 
@@ -186,7 +211,9 @@
   <span class="keyword">var</span> stop = <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
     server.close(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
       <span class="keyword">if</span>(done){
-        console.log(<span class="string">'server shut down'</span>);
+        <span class="keyword">if</span>(process.env.NODE_ENV !== <span class="string">'test'</span>){
+          console.log(<span class="string">'Landcaster REST server shut down'</span>);
+        }
         done();
       }
     });
