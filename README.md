@@ -8,7 +8,7 @@ Version 0.0.1
 npm install landcaster
 ```
 
-either clone the repo, edit config.js and use `node server.js` or
+Either clone the repo, edit config.js and use `node server.js` or
 
 ```
 npm install landcaster
@@ -16,9 +16,14 @@ var landcaster = require('landcaster');
 var server = landcaster({ ... opts ... });
 ```
 
-
-```javascript
+```bash
+git clone https://github.com/simonswain/landcaster.git
+cd landcaster
+npm install
+cp config.sample.js config.js
+node server
 ```
+
 
 ## Release History
 
