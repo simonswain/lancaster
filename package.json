@@ -39,7 +39,9 @@
     "grunt": "~0.4.2",
     "grunt-contrib-jshint": "~0.7.2",
     "grunt-docco2": "~0.1.5",
-    "grunt-contrib-nodeunit": "~0.2.2"
+    "grunt-contrib-nodeunit": "~0.2.2",
+    "nodeunit": "~0.8.2",
+    "nodeunit-httpclient": "~0.2.1"
   },
   "keywords": [
     "reactive",
