@@ -1,0 +1,48 @@
+{
+  "name": "landcaster",
+  "description": "Reactive data API service",
+  "version": "0.0.1",
+  "homepage": "https://github.com/simonswain/landcaster",
+  "author": {
+    "name": "Simon Swain",
+    "email": "simon@simonswain.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/simonswain/landcaster.git"
+  },
+  "bugs": {
+    "url": "https://github.com/simonswain/landcaster/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/simonswain/landcaster/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "lib/landcaster",
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "dependencies": {
+    "underscore": "~1.5.2",
+    "redis": "~0.9.0",
+    "hiredis": "~0.1.15",
+    "async": "~0.2.9",
+    "spitfire": "0.0.2",
+    "express": "~3.4.4"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-jshint": "~0.7.2",
+    "grunt-docco2": "~0.1.5",
+    "grunt-contrib-nodeunit": "~0.2.2"
+  },
+  "keywords": [
+    "reactive",
+    "dataflow"
+  ]
+}
