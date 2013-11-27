@@ -77,6 +77,25 @@ module.exports = <span class="function"><span class="keyword">function</span><sp
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
+              <p>app.post (
+  ‘/reset’,
+  function(req, res) {
+    api.reset(function(){
+      res.send(204);
+    });
+  });</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
               <p>Inpsect nodes</p>
 
             </div>
@@ -90,11 +109,11 @@ module.exports = <span class="function"><span class="keyword">function</span><sp
         </li>
         
         
-        <li id="section-5">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>Create a node</p>
 
@@ -107,23 +126,30 @@ module.exports = <span class="function"><span class="keyword">function</span><sp
         </li>
         
         
-        <li id="section-6">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>here add attributes, process function, sources.</p>
+              <p>id
+fn
+sources []
+… attributes</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>
+      <span class="keyword">if</span>(!req.body.hasOwnProperty(<span class="string">'id'</span>)){
+        res.send(<span class="number">400</span>);
+      }
+
       <span class="keyword">var</span> node = {
-        id: req.body.id
+        sources: []
       };
 
-      <span class="keyword">if</span>(req.body.hasOwnProperty(<span class="string">'sources'</span>)){
-        node.sources = req.body.sources;
+      <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> req.body){
+        node[key] = req.body[key];
       }
 
       api.add(node, <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
@@ -155,11 +181,11 @@ module.exports = <span class="function"><span class="keyword">function</span><sp
         </li>
         
         
-        <li id="section-7">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>Set attributes on a node</p>
 
@@ -187,11 +213,11 @@ module.exports = <span class="function"><span class="keyword">function</span><sp
         </li>
         
         
-        <li id="section-8">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>Inject a message to a node</p>
 
