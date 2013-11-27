@@ -195,14 +195,14 @@ run in series when the instance is created.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>    redis.keys( 
-      config.redis.prefix +<span class="string">'*'</span>, 
+      config.redis.prefix + <span class="string">'*'</span>, 
       <span class="function"><span class="keyword">function</span><span class="params">(err, keys)</span>{</span>
         _.each(keys, <span class="function"><span class="keyword">function</span><span class="params">(key)</span>{</span>
-          console.log(key);         
           redis.del(key);
         });
         <span class="keyword">return</span> done();
       });
+
   };</pre></div></div>
             
         </li>
@@ -213,24 +213,6 @@ run in series when the instance is created.</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-10">&#182;</a>
-              </div>
-              <p>load node details from Redis</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> load = <span class="function"><span class="keyword">function</span><span class="params">(id, done)</span>{</span>
-    <span class="keyword">var</span> node;
-    <span class="keyword">return</span> done(<span class="literal">false</span>, node);
-  };</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-11">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>save node details to Redis. The node param is JSON, not a node
 instance. Should attributes be saved here, or separately (one key
@@ -243,29 +225,62 @@ per attr)</p>
         </li>
         
         
-        <li id="section-12">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> key = config.redis.prefix + <span class="string">':node'</span> + node.id;
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> key = config.redis.prefix + <span class="string">':nodes:'</span> + node.id;
     <span class="keyword">var</span> val = {
       id: node.id,
       fn: node.fn,
       sources: node.sources
     };
 
-    console.log(<span class="string">'SAVE'</span>, node, key);
     redis.set(key, JSON.stringify(val));
 
-    <span class="keyword">return</span> done();
-
+    <span class="keyword">var</span> attrs = {};
+    _.each(node, <span class="function"><span class="keyword">function</span><span class="params">(v,k)</span>{</span>
+      <span class="keyword">if</span>(k !== <span class="string">'id'</span> &amp;&amp; k !== <span class="string">'fn'</span> &amp;&amp; k !== <span class="string">'sources'</span> ){
+        attrs[k] = v;
+      }
+    });
+    set(node.id, attrs, done);
 
   };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>add a node to the topology, providing the correction function for
+it’s process handler</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> add = <span class="function"><span class="keyword">function</span><span class="params">(node, done)</span>{</span>
+
+    <span class="keyword">if</span>(!node.hasOwnProperty(<span class="string">'sources'</span>)){
+      node.sources = [];
+    }
+    <span class="keyword">var</span> opts = {
+      id: node.id
+    };
+
+    _.each(node, <span class="function"><span class="keyword">function</span><span class="params">(v,k)</span>{</span>
+      <span class="keyword">if</span>(k !== <span class="string">'id'</span> &amp;&amp; k !== <span class="string">'fn'</span> &amp;&amp; k !== <span class="string">'sources'</span> ){
+        opts[k] = v;
+      }
+    });</pre></div></div>
             
         </li>
         
@@ -276,15 +291,9 @@ per attr)</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <p>Pull any saved structure from db and recreate nodes</p>
+              <p>here look up and require fn </p>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> loadAll = <span class="function"><span class="keyword">function</span><span class="params">(next)</span>{</span>
-    next();
-  };
-
-  <span class="keyword">var</span> onMessage = <span class="function"><span class="keyword">function</span><span class="params">(message)</span>{</span></pre></div></div>
             
         </li>
         
@@ -295,9 +304,29 @@ per attr)</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
-              <p>just a stub for now</p>
+              <p>dummy process handler</p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> fn = <span class="function"><span class="keyword">function</span><span class="params">(msg, done)</span>{</span>
+      done(<span class="literal">null</span>, msg);
+    };
+    
+    <span class="keyword">return</span> topology.add(opts, {process: fn}, node.sources, done);
+
+  };
+
+  <span class="keyword">var</span> fetch = <span class="function"><span class="keyword">function</span><span class="params">(id, done)</span>{</span>
+    <span class="keyword">var</span> node = topology.get(id);
+    redis.get(
+      config.redis.prefix + <span class="string">':nodes:'</span> + id, 
+      <span class="function"><span class="keyword">function</span><span class="params">(err, n)</span>{</span>
+        n = JSON.parse(n);
+        node.fn = n.fn;
+        node.sources = n.sources;
+        done(<span class="literal">null</span>, node);
+      });
+  };</pre></div></div>
             
         </li>
         
@@ -308,11 +337,20 @@ per attr)</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              <p>console.log(‘MESSAGE’, JSON.stringify(message));</p>
+              <p>load node details from Redis</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  };</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> load = <span class="function"><span class="keyword">function</span><span class="params">(id, done)</span>{</span>
+    redis.get(
+      config.redis.prefix + <span class="string">':nodes:'</span> + id, 
+      <span class="function"><span class="keyword">function</span><span class="params">(err, node)</span>{</span>
+        node = JSON.parse(node);
+        add(node, <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+          loadAttrs(id, done);
+        });
+      });
+  };</pre></div></div>
             
         </li>
         
@@ -322,6 +360,133 @@ per attr)</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Pull any saved structure from db and recreate nodes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> loadAll = <span class="function"><span class="keyword">function</span><span class="params">(next)</span>{</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>redis</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    redis.keys( 
+      config.redis.prefix + <span class="string">':nodes:*'</span>, 
+      <span class="function"><span class="keyword">function</span><span class="params">(err, keys)</span>{</span>
+        async.eachSeries(
+          keys, 
+          <span class="function"><span class="keyword">function</span><span class="params">(key, done)</span>{</span>
+            <span class="keyword">var</span> id = _.last(key.split(<span class="string">':'</span>));
+            load(id, done);
+          },
+          next);
+      });
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>load all attrs for a given node</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> loadAttrs = <span class="function"><span class="keyword">function</span><span class="params">(id, done)</span>{</span>
+    <span class="keyword">var</span> attrs = {};
+    redis.keys( 
+      config.redis.prefix + <span class="string">':attrs:'</span> + id + <span class="string">':*'</span>, 
+      <span class="function"><span class="keyword">function</span><span class="params">(err, keys)</span>{</span>
+        async.eachSeries(
+          keys, 
+          <span class="function"><span class="keyword">function</span><span class="params">(k, next)</span>{</span>
+            redis.get(k, <span class="function"><span class="keyword">function</span><span class="params">(err, val)</span>{</span>
+              <span class="keyword">var</span> key = _.last(k.split(<span class="string">':'</span>));
+              topology.set(id, key, val);
+              next();
+            });
+          },
+          done
+        );
+      });
+  };
+
+
+  <span class="keyword">var</span> set = <span class="function"><span class="keyword">function</span><span class="params">(id, attributes, done)</span>{</span>
+    <span class="keyword">var</span> attrs = _.map(attributes, <span class="function"><span class="keyword">function</span><span class="params">(v, k)</span>{</span>
+      <span class="keyword">return</span> {
+        key: k, 
+        value: v
+      };
+    });
+
+    async.each(
+      attrs, 
+      <span class="function"><span class="keyword">function</span><span class="params">(attr, next)</span>{</span>
+        redis.set(
+          config.redis.prefix + <span class="string">':attrs:'</span> + id + <span class="string">':'</span> + attr.key,
+          attr.value,
+          next
+        );
+      },
+      done
+    );
+
+  };
+  
+
+  <span class="keyword">var</span> onMessage = <span class="function"><span class="keyword">function</span><span class="params">(message)</span>{</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>just a stub for now</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>console.log(‘MESSAGE’, JSON.stringify(message));</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
               <p>Set up listeners to write data from topo to db</p>
 
@@ -336,11 +501,11 @@ per attr)</p>
         </li>
         
         
-        <li id="section-17">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p>Initialize the REST API/Socket.io server</p>
 
@@ -358,11 +523,11 @@ per attr)</p>
         </li>
         
         
-        <li id="section-18">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p>Start up the REST API/Socket.io server</p>
 
@@ -375,11 +540,11 @@ per attr)</p>
         </li>
         
         
-        <li id="section-19">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>Get everything running</p>
 
@@ -400,11 +565,11 @@ per attr)</p>
         </li>
         
         
-        <li id="section-20">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <p>Take everything down cleanly</p>
 
@@ -427,11 +592,11 @@ per attr)</p>
         </li>
         
         
-        <li id="section-21">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <h1 id="api">API</h1>
 
@@ -440,11 +605,11 @@ per attr)</p>
         </li>
         
         
-        <li id="section-22">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <p>This API is provided to REST and any other front-ends. It’s the
 only way they should be touching the Topology</p>
@@ -457,11 +622,11 @@ only way they should be touching the Topology</p>
         </li>
         
         
-        <li id="section-23">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>Get all nodes and their sources</p>
 
@@ -474,11 +639,11 @@ only way they should be touching the Topology</p>
         </li>
         
         
-        <li id="section-24">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <p>Add a node to the Topology</p>
 
@@ -489,11 +654,11 @@ only way they should be touching the Topology</p>
         </li>
         
         
-        <li id="section-25">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <p>save to redis</p>
 
@@ -507,20 +672,24 @@ only way they should be touching the Topology</p>
         </li>
         
         
-        <li id="section-26">
+        <li id="section-31">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
               <p>add to topology</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">return</span> topology.add(node, done);
+            <div class="content"><div class='highlight'><pre>        add(node, done);
       });
     },
     
+    fetch: <span class="function"><span class="keyword">function</span><span class="params">(id, done)</span>{</span>
+      <span class="keyword">return</span> fetch(id, done);
+    },
+
     remove: <span class="function"><span class="keyword">function</span><span class="params">(id, done)</span>{</span>
       <span class="keyword">return</span> topology.remove(id, done);
     },</pre></div></div>
@@ -528,11 +697,11 @@ only way they should be touching the Topology</p>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
               <p>Get value latched from last mesage processed</p>
 
@@ -545,11 +714,11 @@ only way they should be touching the Topology</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-33">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
               <p>Get a single node. Returns <code>undefined</code> if doesn’t exist</p>
 
@@ -560,7 +729,7 @@ only way they should be touching the Topology</p>
     },
 
     set: <span class="function"><span class="keyword">function</span><span class="params">(id, attributes, done)</span>{</span>
-      <span class="keyword">return</span> topology.set(id, done);
+      <span class="keyword">return</span> set(id, attributes, done);
     },
 
     inject: <span class="function"><span class="keyword">function</span><span class="params">(id, message, done)</span>{</span>
@@ -572,11 +741,11 @@ only way they should be touching the Topology</p>
         </li>
         
         
-        <li id="section-29">
+        <li id="section-34">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
+                <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
               <p>Make it run</p>
 

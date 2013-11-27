@@ -11,18 +11,25 @@ var http = require('nodeunit-httpclient').create({
 
 var landcaster = require('../lib/landcaster.js');
 
+
+// create a topo, do some actions on them, stop and start the topo.
+// the data from the actions should have been persisted
+
 exports['rest'] = {
 
+  // clean up from any previous runs
   'reset': function(test) {
     //test.expect(4);
     landcaster(config, function(server){
       server.reset(function(err){
-          server.stop(function(){
-            test.done();
-          });
+        server.stop(function(){
+          test.done();
+        });
       });
     });
   },
+
+  // create a node, stop/start. node should still be tere
   'restore': function(test) {
     test.expect(4);
     var myServer;
@@ -67,141 +74,76 @@ exports['rest'] = {
         });     
       },
       function(next){
-        myServer.stop(function(){
-          next();
+        myServer.reset(function(){
+          myServer.stop(function(){
+            next();
+          });
         });
       },
     ], function(){
       test.done();
-    })
+    });
+  },
 
-    // })
+  // create a node and set some attributes on it. they should still be
+  // there after stop/start
 
-     // http.post(
-     //    test,
-     //    'reset', {
-     //      data:{}
-     //    }, {
-     //      status: 200
-     //    }, function(res) {
-     //      console.log('GOT', res.body);
-     //      server.stop(function(){
-     //        test.done();
-     //      });
-
-     //      // // inpsect to check nodes were created
-     //      // http.get( test, 'nodes', function(res) {
-     //      //   test.equal(typeof res.data, 'object');
-     //      //   test.ok(res.data.hasOwnProperty('test-node'));
-     //      //   server.stop(function(){
-     //      //     test.done();
-     //      //   });
-     //      // });
-
-     //    });
-
-
-  // },
-  // 'create-node': function(test) {
-  //   test.expect(4);
-  //   landcaster(config, function(server){
-  //     http.post(
-  //       test,
-  //       'nodes', {
-  //         data:{
-  //           'id': 'test-node',
-  //           'factor': 10,
-  //           'fn': 'multiply'
-  //         }
-  //       }, {
-  //         status: 204
-  //       }, function(res) {
-
-  //         // inpsect to check nodes were created
-  //         http.get( test, 'nodes', function(res) {
-  //           test.equal(typeof res.data, 'object');
-  //           test.ok(res.data.hasOwnProperty('test-node'));
-  //           server.stop(function(){
-  //             test.done();
-  //           });
-  //         });
-
-  //       });
-  //   });
-  // },
-
-  // 'delete-node': function(test) {
-  //   test.expect(5);
-
-  //   landcaster(config, function(server){
-  //     // create
-  //     http.post(
-  //       test,
-  //       'nodes', {
-  //         data:{
-  //           'id': 'test-node'
-  //         }
-  //       }, {
-  //         status: 204
-  //       }, function(res) {
-
-  //         http.del(
-  //           test,
-  //           'nodes/test-node',
-  //           {},
-  //           {status: 204},
-  //           function(res) {
-
-  //             http.get( test, 'nodes', function(res) {
-  //               test.equal(typeof res.data, 'object');
-  //               test.equal(res.data.hasOwnProperty('test-node'), false);
-  //               server.stop(function(){
-  //                 test.done();
-  //               });
-  //             });
-  //           });
-
-  //       });
-  //   });
-  // },
-
-  // 'inject': function(test) {
-  //   test.expect(5);
-  //   landcaster(config, function(server){
-
-  //     http.post(
-  //       test,
-  //       'nodes',
-  //       {data:{'id': 'test-node'}},
-  //       {status: 204},
-  //       function(res) {
-
-  //         var myMessage = {value: 1000.00};
-
-  //         http.post(
-  //           test,
-  //           'nodes/test-node/message',
-  //           {data: myMessage},
-  //           {status: 204},
-  //           function(res) {
-
-  //             // get val
-  //             http.get(
-  //               test,
-  //               'nodes/test-node',
-  //               function(res) {
-  //                 test.equal(typeof res.data, 'object');
-  //                 // should have latched most recent processed message
-  //                 test.deepEqual(res.data.val, myMessage);
-  //                 server.stop(function(){
-  //                   test.done();
-  //                 });
-  //               });
-
-  //           });
-  //       });
-
-  //   });
+  'save-restore-attrs': function(test) {
+    test.expect(6);
+    var myServer;
+    async.series([
+      // clean state
+      function(next){
+        landcaster(config, function(server){
+          myServer = server;
+          server.reset(function(err){
+            next();
+          });
+        });     
+      },
+      function(next){
+        http.post(
+          test,
+          'nodes', {
+            data:{
+              'id': 'test-node',
+              'factor': 10, // this is our attr
+              'fn': 'multiply',
+            }
+          }, {
+            status: 204
+          }, function(res) {
+            next();
+          });
+      },
+      function(next){
+        myServer.stop(function(){
+          next();
+        });
+      },
+      function(next){
+        landcaster(config, function(server){
+          myServer = server;
+          // should have reloaded nodes
+          http.get( test, 'nodes', function(res) {
+            test.equal(typeof res.data, 'object');
+            test.ok(res.data.hasOwnProperty('test-node'));
+            test.ok(res.data['test-node'].hasOwnProperty('attributes'));
+            test.equal(res.data['test-node']['attributes']['factor'], 10, 'should match set value');            
+            next();
+          });
+        });     
+      },
+      function(next){
+        //myServer.reset(function(){
+        myServer.stop(function(){
+          next();
+        });
+        //});
+      },
+    ], function(){
+      test.done();
+    });
   }
 
 };

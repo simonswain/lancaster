@@ -161,7 +161,12 @@ sources []
   app.get (
     <span class="string">'/nodes/:id'</span>,
     <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> {</span>
-      res.send(<span class="number">200</span>, api.get(req.params.id));
+      api.fetch(req.params.id, <span class="function"><span class="keyword">function</span><span class="params">(err, node)</span>{</span>
+        <span class="keyword">if</span>(!node){
+          <span class="keyword">return</span> res.send(<span class="number">404</span>);
+        }
+        res.send(<span class="number">200</span>, node);
+      });
     });
 
   app.del (
@@ -194,13 +199,12 @@ sources []
             <div class="content"><div class='highlight'><pre>  app.post (
     <span class="string">'/nodes/:id'</span>,
     <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> {</span>
-
       <span class="keyword">if</span>(!api.get(req.params.id)){
         <span class="keyword">return</span> res.send(<span class="number">404</span>);
       }
 
       <span class="keyword">var</span> attributes = req.body;
-
+      
       api.set(
         req.params.id, 
         attributes, 
@@ -226,6 +230,7 @@ sources []
             <div class="content"><div class='highlight'><pre>  app.post (
     <span class="string">'/nodes/:id/message'</span>,
     <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> {</span>
+
       <span class="keyword">if</span>(!api.get(req.params.id)){
         <span class="keyword">return</span> res.send(<span class="number">404</span>);
       }
