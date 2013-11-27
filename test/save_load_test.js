@@ -135,11 +135,11 @@ exports['rest'] = {
         });     
       },
       function(next){
-        //myServer.reset(function(){
-        myServer.stop(function(){
-          next();
+        myServer.reset(function(){
+          myServer.stop(function(){
+            next();
+          });
         });
-        //});
       },
     ], function(){
       test.done();
