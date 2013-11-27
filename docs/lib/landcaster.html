@@ -133,7 +133,7 @@ run in series when the instance is created.</p>
     }
 
     redis = Redis.createClient({
-      host: config.redis.host, 
+      host: config.redis.host,
       port: config.redis.port,
       prefix: config.redis.prefix
     });
@@ -194,8 +194,8 @@ run in series when the instance is created.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    redis.keys( 
-      config.redis.prefix + <span class="string">'*'</span>, 
+            <div class="content"><div class='highlight'><pre>    redis.keys(
+      config.redis.prefix + <span class="string">'*'</span>,
       <span class="function"><span class="keyword">function</span><span class="params">(err, keys)</span>{</span>
         _.each(keys, <span class="function"><span class="keyword">function</span><span class="params">(key)</span>{</span>
           redis.del(key);
@@ -291,7 +291,7 @@ it’s process handler</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <p>here look up and require fn </p>
+              <p>here look up and require fn</p>
 
             </div>
             
@@ -311,7 +311,7 @@ it’s process handler</p>
             <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> fn = <span class="function"><span class="keyword">function</span><span class="params">(msg, done)</span>{</span>
       done(<span class="literal">null</span>, msg);
     };
-    
+
     <span class="keyword">return</span> topology.add(opts, {process: fn}, node.sources, done);
 
   };
@@ -319,7 +319,7 @@ it’s process handler</p>
   <span class="keyword">var</span> fetch = <span class="function"><span class="keyword">function</span><span class="params">(id, done)</span>{</span>
     <span class="keyword">var</span> node = topology.get(id);
     redis.get(
-      config.redis.prefix + <span class="string">':nodes:'</span> + id, 
+      config.redis.prefix + <span class="string">':nodes:'</span> + id,
       <span class="function"><span class="keyword">function</span><span class="params">(err, n)</span>{</span>
         n = JSON.parse(n);
         node.fn = n.fn;
@@ -343,7 +343,7 @@ it’s process handler</p>
             
             <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> load = <span class="function"><span class="keyword">function</span><span class="params">(id, done)</span>{</span>
     redis.get(
-      config.redis.prefix + <span class="string">':nodes:'</span> + id, 
+      config.redis.prefix + <span class="string">':nodes:'</span> + id,
       <span class="function"><span class="keyword">function</span><span class="params">(err, node)</span>{</span>
         node = JSON.parse(node);
         add(node, <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
@@ -380,11 +380,11 @@ it’s process handler</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    redis.keys( 
-      config.redis.prefix + <span class="string">':nodes:*'</span>, 
+            <div class="content"><div class='highlight'><pre>    redis.keys(
+      config.redis.prefix + <span class="string">':nodes:*'</span>,
       <span class="function"><span class="keyword">function</span><span class="params">(err, keys)</span>{</span>
         async.eachSeries(
-          keys, 
+          keys,
           <span class="function"><span class="keyword">function</span><span class="params">(key, done)</span>{</span>
             <span class="keyword">var</span> id = _.last(key.split(<span class="string">':'</span>));
             load(id, done);
@@ -408,11 +408,11 @@ it’s process handler</p>
             
             <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> loadAttrs = <span class="function"><span class="keyword">function</span><span class="params">(id, done)</span>{</span>
     <span class="keyword">var</span> attrs = {};
-    redis.keys( 
-      config.redis.prefix + <span class="string">':attrs:'</span> + id + <span class="string">':*'</span>, 
+    redis.keys(
+      config.redis.prefix + <span class="string">':attrs:'</span> + id + <span class="string">':*'</span>,
       <span class="function"><span class="keyword">function</span><span class="params">(err, keys)</span>{</span>
         async.eachSeries(
-          keys, 
+          keys,
           <span class="function"><span class="keyword">function</span><span class="params">(k, next)</span>{</span>
             redis.get(k, <span class="function"><span class="keyword">function</span><span class="params">(err, val)</span>{</span>
               <span class="keyword">var</span> key = _.last(k.split(<span class="string">':'</span>));
@@ -429,13 +429,13 @@ it’s process handler</p>
   <span class="keyword">var</span> set = <span class="function"><span class="keyword">function</span><span class="params">(id, attributes, done)</span>{</span>
     <span class="keyword">var</span> attrs = _.map(attributes, <span class="function"><span class="keyword">function</span><span class="params">(v, k)</span>{</span>
       <span class="keyword">return</span> {
-        key: k, 
+        key: k,
         value: v
       };
     });
 
     async.each(
-      attrs, 
+      attrs,
       <span class="function"><span class="keyword">function</span><span class="params">(attr, next)</span>{</span>
         redis.set(
           config.redis.prefix + <span class="string">':attrs:'</span> + id + <span class="string">':'</span> + attr.key,
@@ -447,7 +447,7 @@ it’s process handler</p>
     );
 
   };
-  
+
 
   <span class="keyword">var</span> onMessage = <span class="function"><span class="keyword">function</span><span class="params">(message)</span>{</span></pre></div></div>
             
@@ -616,7 +616,7 @@ only way they should be touching the Topology</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  
+            <div class="content"><div class='highlight'><pre>
   api = {</pre></div></div>
             
         </li>
@@ -685,7 +685,7 @@ only way they should be touching the Topology</p>
             <div class="content"><div class='highlight'><pre>        add(node, done);
       });
     },
-    
+
     fetch: <span class="function"><span class="keyword">function</span><span class="params">(id, done)</span>{</span>
       <span class="keyword">return</span> fetch(id, done);
     },
