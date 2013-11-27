@@ -8,6 +8,19 @@ Lancaster provides a REST based application server that lets you
 configure processing topologies you inject data into and recieve
 results from. 
 
+Landcaster is designed to work with floats (javascript Numbers)
+
+Running the Landcaster server provids you with an empty topology. 
+
+You create nodes in the Landcaster topology.
+
+Each node receives messages it receives, processing it with a
+specified function, and outputting the result of that function.
+
+A node can have any number of source nodes, allowing you to create signal processing chains.
+
+Any node in the toplogy can have a value injected in to it.
+
 All data points are stored. 
 
 Results can be streamed out in real time over socket.io.
@@ -49,12 +62,14 @@ GET /nodes
 {'id': {node}, ...}
 ```
 
+
 Get a specific node
 ```
 GET /nodes/:id
 
 {node}
 ```
+
 
 Add a node to topology
 ```
@@ -69,6 +84,7 @@ POST /nodes
   ...
 }
 ```
+
 
 Change attributes on a node. Cannot change id, sources or fn
 ```
@@ -91,6 +107,14 @@ POST /nodes/:id/message
 Delete a specific node
 ```
 DELETE /nodes/:id
+```
+
+
+Inject a message in to a node
+```
+GET /nodes/:id/values
+     
+{message}
 ```
 
 
