@@ -318,6 +318,10 @@ it’s process handler</p>
 
   <span class="keyword">var</span> fetch = <span class="function"><span class="keyword">function</span><span class="params">(id, done)</span>{</span>
     <span class="keyword">var</span> node = topology.get(id);
+    console.log(<span class="string">'QQ'</span>, node)
+    <span class="keyword">if</span>(!node){
+      <span class="keyword">return</span> done(<span class="literal">null</span>, <span class="literal">false</span>);
+    }
     redis.get(
       config.redis.prefix + <span class="string">':nodes:'</span> + id,
       <span class="function"><span class="keyword">function</span><span class="params">(err, n)</span>{</span>

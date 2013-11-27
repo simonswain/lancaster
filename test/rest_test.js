@@ -44,6 +44,24 @@ exports['rest'] = {
     });
   },
 
+  'get-non-existant-node': function(test) {
+    test.expect(1);
+    landcaster(config, function(server){
+      http.get( 
+        test, 
+        'nodes/bogus', 
+        {}, 
+        {
+          status: 404
+        }, 
+        function(res) {
+          server.stop(function(){
+            test.done();
+          });
+        });
+    });
+  },
+
   'create-node': function(test) {
     test.expect(4);
     landcaster(config, function(server){
