@@ -177,7 +177,7 @@
 
   <span class="keyword">var</span> stop = <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
     server.close(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
-      <span class="keyword">if</span>(done){
+      <span class="keyword">if</span>(done){ 
         <span class="keyword">if</span>(process.env.NODE_ENV !== <span class="string">'test'</span>){
           console.log(<span class="string">'Landcaster REST server shut down'</span>);
         }

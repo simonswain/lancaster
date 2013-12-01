@@ -318,7 +318,6 @@ it’s process handler</p>
 
   <span class="keyword">var</span> fetch = <span class="function"><span class="keyword">function</span><span class="params">(id, done)</span>{</span>
     <span class="keyword">var</span> node = topology.get(id);
-    console.log(<span class="string">'QQ'</span>, node)
     <span class="keyword">if</span>(!node){
       <span class="keyword">return</span> done(<span class="literal">null</span>, <span class="literal">false</span>);
     }
@@ -498,8 +497,9 @@ it’s process handler</p>
             
             <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> listen = <span class="function"><span class="keyword">function</span><span class="params">(next)</span>{</span>
     topology.on(<span class="string">'message'</span>, onMessage);
-    topology.start();
-    next();
+    topology.start(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+      next();
+    });
   };</pre></div></div>
             
         </li>
