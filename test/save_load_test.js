@@ -11,7 +11,6 @@ var http = require('nodeunit-httpclient').create({
 
 var landcaster = require('../lib/landcaster.js');
 
-
 // create a topo, do some actions on them, stop and start the topo.
 // the data from the actions should have been persisted
 
@@ -29,7 +28,7 @@ exports['rest'] = {
     });
   },
 
-  // create a node, stop/start. node should still be tere
+  // create a node, stop/start. node should still be there
   'restore': function(test) {
     test.expect(4);
     var myServer;
