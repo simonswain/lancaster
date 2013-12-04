@@ -78,6 +78,11 @@ GET /ping
 {pong: <unix-epoch-ms>}
 ```
 
+Restore the topology to a pristine state (no nodes)
+```
+POST /reset
+```
+
 
 Get all nodes in the Topology
 ```
@@ -206,6 +211,10 @@ curl -i -H "Content-Type: application/json" -X POST http://localhost:4002/nodes/
     }
   }
 }
+
+
+
+curl -i -X DELETE http://localhost:4002/nodes/my-node
 
 ```
 
