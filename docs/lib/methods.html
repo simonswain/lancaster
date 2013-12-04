@@ -141,7 +141,7 @@ sources []
             
             <div class="content"><div class='highlight'><pre>
       <span class="keyword">if</span>(!req.body.hasOwnProperty(<span class="string">'id'</span>)){
-        res.send(<span class="number">400</span>);
+        <span class="keyword">return</span> res.send(<span class="number">400</span>);
       }
 
       <span class="keyword">var</span> node = {

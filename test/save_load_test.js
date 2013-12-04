@@ -9,7 +9,7 @@ var http = require('nodeunit-httpclient').create({
   status: 200
 });
 
-var landcaster = require('../lib/landcaster.js');
+var lancaster = require('../lib/lancaster.js');
 
 // create a topo, do some actions on them, stop and start the topo.
 // the data from the actions should have been persisted
@@ -18,8 +18,7 @@ exports['rest'] = {
 
   // clean up from any previous runs
   'reset': function(test) {
-    //test.expect(4);
-    landcaster(config, function(server){
+    lancaster(config, function(server){
       server.reset(function(err){
         server.stop(function(){
           test.done();
@@ -34,7 +33,7 @@ exports['rest'] = {
     var myServer;
     async.series([
       function(next){
-        landcaster(config, function(server){
+        lancaster(config, function(server){
           myServer = server;
           server.reset(function(err){
             next();
@@ -62,7 +61,7 @@ exports['rest'] = {
         });
       },
       function(next){
-        landcaster(config, function(server){
+        lancaster(config, function(server){
           myServer = server;
           // should have reloaded nodes
           http.get( test, 'nodes', function(res) {
@@ -93,7 +92,7 @@ exports['rest'] = {
     async.series([
       // clean state
       function(next){
-        landcaster(config, function(server){
+        lancaster(config, function(server){
           myServer = server;
           server.reset(function(err){
             next();
@@ -121,7 +120,7 @@ exports['rest'] = {
         });
       },
       function(next){
-        landcaster(config, function(server){
+        lancaster(config, function(server){
           myServer = server;
           // should have reloaded nodes
           http.get( test, 'nodes', function(res) {

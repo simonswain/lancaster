@@ -1,7 +1,7 @@
 var config = require('./config.js');
-var landcaster = require('./index.js');
+var lancaster = require('./index.js');
 
-landcaster(config, function(server){
+lancaster(config, function(server){
 
   // handle shutdown gracefully
   process.on( 'SIGINT', function() {

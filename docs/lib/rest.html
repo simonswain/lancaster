@@ -161,11 +161,11 @@
         }
 
         <span class="keyword">if</span>(!app.config.listen &amp;&amp; process.env.NODE_ENV !== <span class="string">'test'</span>){
-          console.log(<span class="string">'Landcaster REST server running on'</span>, app.config.port);
+          console.log(<span class="string">'Lancaster REST server running on'</span>, app.config.port);
         }
 
         <span class="keyword">if</span>(app.config.listen &amp;&amp; process.env.NODE_ENV !== <span class="string">'test'</span>){
-          console.log(<span class="string">'Landcaster REST server listening at'</span>, listen);
+          console.log(<span class="string">'Lancaster REST server listening at'</span>, listen);
         }
 
         <span class="keyword">if</span>(done){
@@ -177,9 +177,9 @@
 
   <span class="keyword">var</span> stop = <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
     server.close(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
-      <span class="keyword">if</span>(done){ 
+      <span class="keyword">if</span>(done){
         <span class="keyword">if</span>(process.env.NODE_ENV !== <span class="string">'test'</span>){
-          console.log(<span class="string">'Landcaster REST server shut down'</span>);
+          console.log(<span class="string">'Lancaster REST server shut down'</span>);
         }
         done();
       }

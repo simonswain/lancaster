@@ -8,12 +8,12 @@ var http = require('nodeunit-httpclient').create({
   status: 200
 });
 
-var landcaster = require('../lib/landcaster.js');
+var lancaster = require('../lib/lancaster.js');
 
 exports['rest'] = {
 
   'server-start-stop': function(test) {
-    landcaster(config, function(server){
+    lancaster(config, function(server){
       server.stop(function(){
         test.done();
       });
@@ -22,7 +22,7 @@ exports['rest'] = {
 
   'ping': function(test) {
     test.expect(2);
-    landcaster(config, function(server){
+    lancaster(config, function(server){
       http.get( test, 'ping', function(res) {
         test.ok(res.data.hasOwnProperty('pong'), 'Got Pong back from Ping');
         server.stop(function(){
@@ -34,7 +34,7 @@ exports['rest'] = {
 
   'inspect': function(test) {
     test.expect(2);
-    landcaster(config, function(server){
+    lancaster(config, function(server){
       http.get( test, 'nodes', function(res) {
         test.equal(typeof res.data, 'object');
         server.stop(function(){
@@ -46,7 +46,7 @@ exports['rest'] = {
 
   'get-non-existant-node': function(test) {
     test.expect(1);
-    landcaster(config, function(server){
+    lancaster(config, function(server){
       http.get( 
         test, 
         'nodes/bogus', 
@@ -64,7 +64,7 @@ exports['rest'] = {
 
   'create-node': function(test) {
     test.expect(4);
-    landcaster(config, function(server){
+    lancaster(config, function(server){
       http.post(
         test, 
         'nodes', {
@@ -91,7 +91,7 @@ exports['rest'] = {
   'delete-node': function(test) {
     test.expect(5);
 
-    landcaster(config, function(server){
+    lancaster(config, function(server){
       // create
       http.post(
         test, 
@@ -125,7 +125,7 @@ exports['rest'] = {
 
   'inject': function(test) {
     //test.expect(5);
-    landcaster(config, function(server){
+    lancaster(config, function(server){
       server.reset(function(){
         http.post(
           test, 

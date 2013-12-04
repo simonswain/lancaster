@@ -1,26 +1,26 @@
 {
-  "name": "landcaster",
+  "name": "lancaster",
   "description": "Reactive data API service",
   "version": "0.0.1",
-  "homepage": "https://github.com/simonswain/landcaster",
+  "homepage": "https://github.com/simonswain/lancaster",
   "author": {
     "name": "Simon Swain",
     "email": "simon@simonswain.com"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/simonswain/landcaster.git"
+    "url": "git://github.com/simonswain/lancaster.git"
   },
   "bugs": {
-    "url": "https://github.com/simonswain/landcaster/issues"
+    "url": "https://github.com/simonswain/lancaster/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/simonswain/landcaster/blob/master/LICENSE-MIT"
+      "url": "https://github.com/simonswain/lancaster/blob/master/LICENSE-MIT"
     }
   ],
-  "main": "lib/landcaster",
+  "main": "lib/lancaster",
   "engines": {
     "node": ">= 0.10.0"
   },

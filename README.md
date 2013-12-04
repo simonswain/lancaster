@@ -1,18 +1,18 @@
-# Landcaster
+# Lancaster
 
 Version 0.0.1
 
-[![Build Status](https://travis-ci.org/simonswain/landcaster.png)](https://travis-ci.org/simonswain/landcaster)
+[![Build Status](https://travis-ci.org/simonswain/lancaster.png)](https://travis-ci.org/simonswain/lancaster)
 
 Lancaster provides a REST based application server that lets you
 configure processing topologies you inject data into and recieve
 results from. 
 
-Landcaster is designed to work with floats (javascript Numbers)
+Lancaster is designed to work with floats (javascript Numbers)
 
-Running the Landcaster server provids you with an empty topology. 
+Running the Lancaster server provids you with an empty topology. 
 
-You create nodes in the Landcaster topology.
+You create nodes in the Lancaster topology.
 
 Each node receives messages it receives, processing it with a
 specified function, and outputting the result of that function.
@@ -26,20 +26,20 @@ All data points are stored.
 Results can be streamed out in real time over socket.io.
 
 ```bash
-npm install landcaster
+npm install lancaster
 ```
 
 Either clone the repo, edit config.js and use `node server.js` or
 
 ```
-npm install landcaster
-var landcaster = require('landcaster');
-var server = landcaster({ ... opts ... });
+npm install lancaster
+var lancaster = require('lancaster');
+var server = lancaster({ ... opts ... });
 ```
 
 ```bash
-git clone https://github.com/simonswain/landcaster.git
-cd landcaster
+git clone https://github.com/simonswain/lancaster.git
+cd lancaster
 npm install
 cp config.sample.js config.js
 node server
@@ -116,6 +116,72 @@ GET /nodes/:id/values
      
 {message}
 ```
+
+## curl examples
+
+```bash
+curl -i -X GET http://localhost:4002/ping
+curl -i -X GET http://localhost:4002/nodes
+curl -i -X GET http://localhost:4002/nodes/unknown-node
+
+curl -i -H "Content-Type: application/json" -X POST http://localhost:4002/nodes/ -d '{"id":"my-node", "fn":"multiply","factor":10}'
+
+curl -i -X GET http://localhost:4002/nodes/my-node
+
+{
+  "my-node": {
+    "id": "my-node",
+    "attributes": {
+      "factor": "10"
+    }
+  }
+}
+
+
+
+curl -i -H "Content-Type: application/json" -X POST http://localhost:4002/nodes/ -d '{"id":"other-node", "fn":"multiply","factor":10, "sources":["my-node"]}'
+
+curl -i -X GET http://localhost:4002/nodes
+
+
+{
+  "my-node": {
+    "id": "my-node",
+    "attributes": {
+      "factor": 10
+    },
+    "sources": [
+      "my-node"
+    ]
+  },
+  "other-node": {
+    "id": "other-node",
+    "attributes": {
+      "factor": 10
+    },
+    "sources": [
+      "my-node"
+    ]
+  }
+}
+
+curl -i -H "Content-Type: application/json" -X POST http://localhost:4002/nodes/my-node/message -d '{"value":100}'
+
+{
+  "my-node": {
+    "id": "my-node",
+    "val": {
+      "value": 100
+    },
+    "attributes": {
+      "factor": "10"
+    }
+  }
+}
+
+```
+
+
 
 
 
