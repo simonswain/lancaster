@@ -6,24 +6,48 @@ Version 0.0.1
 
 Lancaster provides a REST based application server that lets you
 configure processing topologies you inject data into and recieve
-results from. 
+results from.
 
-Lancaster is designed to work with floats (javascript Numbers)
+Lancaster is designed to work with messages containing a time (UTC
+epoch milliseconds) and a value (Number)
 
-Running the Lancaster server provids you with an empty topology. 
+```json
+{at: 1386197370482, value: 100.00}
+```
+
+Running the Lancaster server provids you with an empty topology.
 
 You create nodes in the Lancaster topology.
 
-Each node receives messages it receives, processing it with a
-specified function, and outputting the result of that function.
+Each node processes messages it receives with a specified function,
+and outputting the result of that function.
 
-A node can have any number of source nodes, allowing you to create signal processing chains.
+Landcaster contains a predefined set of functions for averaging,
+filtering and alerting data.
+
+Some functions have parameters that control their operation.
+
+Once set for a node a function cannot be changed, but parameters can
+be adjusted.
+
+Some functions are stateful (eg average over time) and such state is
+stored and will be retrieved in case of restarting the server.
+
+A node can have any number of source nodes, allowing you to create
+signal processing and switching chains, and combine multiple inputs in
+to a single output stream.
 
 Any node in the toplogy can have a value injected in to it.
 
-All data points are stored. 
+All data points (outputs of nodes) are stored and history of a node
+can be retrieved.
 
-Results can be streamed out in real time over socket.io.
+Results can be streamed out in real time via sock.js.
+
+## Installing
+
+Landcaster requires Redis and Cassandra
+
 
 ```bash
 npm install lancaster
@@ -76,8 +100,8 @@ Add a node to topology
 POST /nodes
 
 {
-  id: 'xxx', 
-  fn:'fn-slug', 
+  id: 'xxx',
+  fn:'fn-slug',
   sources[id, id, id]
   '<attr>': <value>',
   '<attr>': <value>',
@@ -85,8 +109,12 @@ POST /nodes
 }
 ```
 
+The `id, `fn` and `sources` keys are reserved. Any other keys can be
+used for attrs. Attrs will be used by the fn to control it's
+operation.
 
-Change attributes on a node. Cannot change id, sources or fn
+
+Change attributes on a node. Cannot change `id`, `sources` or `fn`
 ```
 POST /nodes/:id
 
@@ -100,7 +128,7 @@ POST /nodes/:id
 Inject a message in to a node
 ```
 POST /nodes/:id/message
-     
+
 {message}
 ```
 
@@ -112,8 +140,8 @@ DELETE /nodes/:id
 
 Inject a message in to a node
 ```
-GET /nodes/:id/values
-     
+GET /nodes/:id/message
+
 {message}
 ```
 
