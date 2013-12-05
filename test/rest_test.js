@@ -145,14 +145,15 @@ exports['rest'] = {
               {data: myMessage},
               {status: 204}, 
               function(res) {
-                // get val
+                // get latched message
                 http.get(
                   test, 
                   'nodes/test-node', 
                   function(res) {
                     test.equal(typeof res.data, 'object');
-                    // should have latched most recent processed message
-                    test.deepEqual(res.data.val, myMessage);
+                    // should have latched most recent processed
+                    // message
+                    test.deepEqual(res.data.message, myMessage);
                     server.reset(function(){
                       server.stop(function(){
                         test.done();
