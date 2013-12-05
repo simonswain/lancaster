@@ -215,7 +215,7 @@ run in series when the instance is created.</p>
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>save node details to Redis. The node param is JSON, not a node
-instance. Should attributes be saved here, or separately (one key
+instance. Should attrs be saved here, or separately (one key
 per attr)</p>
 
             </div>
@@ -429,8 +429,9 @@ it’s process handler</p>
   };
 
 
-  <span class="keyword">var</span> set = <span class="function"><span class="keyword">function</span><span class="params">(id, attributes, done)</span>{</span>
-    <span class="keyword">var</span> attrs = _.map(attributes, <span class="function"><span class="keyword">function</span><span class="params">(v, k)</span>{</span>
+  <span class="keyword">var</span> set = <span class="function"><span class="keyword">function</span><span class="params">(id, attrs, done)</span>{</span>
+
+    attrs = _.map(attrs, <span class="function"><span class="keyword">function</span><span class="params">(v, k)</span>{</span>
       <span class="keyword">return</span> {
         key: k,
         value: v
@@ -632,12 +633,12 @@ only way they should be touching the Topology</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
-              <p>Get all nodes and their sources</p>
+              <p>Reset the database and topology to pristine state</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    inspect: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
-      <span class="keyword">return</span> topology.inspect();
+            <div class="content"><div class='highlight'><pre>    reset: <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
+      <span class="keyword">return</span> reset(done);
     },</pre></div></div>
             
         </li>
@@ -649,11 +650,13 @@ only way they should be touching the Topology</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
-              <p>Add a node to the Topology</p>
+              <p>Get all nodes and their sources</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    add: <span class="function"><span class="keyword">function</span><span class="params">(node, done)</span>{</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    inspect: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+      <span class="keyword">return</span> topology.inspect();
+    },</pre></div></div>
             
         </li>
         
@@ -663,6 +666,21 @@ only way they should be touching the Topology</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>Add a node to the Topology</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    add: <span class="function"><span class="keyword">function</span><span class="params">(node, done)</span>{</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
               <p>save to redis</p>
 
@@ -676,11 +694,11 @@ only way they should be touching the Topology</p>
         </li>
         
         
-        <li id="section-31">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
+                <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
               <p>add to topology</p>
 
@@ -701,11 +719,11 @@ only way they should be touching the Topology</p>
         </li>
         
         
-        <li id="section-32">
+        <li id="section-33">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-32">&#182;</a>
+                <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
               <p>Get value latched from last mesage processed</p>
 
@@ -718,11 +736,11 @@ only way they should be touching the Topology</p>
         </li>
         
         
-        <li id="section-33">
+        <li id="section-34">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
+                <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
               <p>Get a single node. Returns <code>undefined</code> if doesn’t exist</p>
 
@@ -732,8 +750,8 @@ only way they should be touching the Topology</p>
       <span class="keyword">return</span> topology.get(id);
     },
 
-    set: <span class="function"><span class="keyword">function</span><span class="params">(id, attributes, done)</span>{</span>
-      <span class="keyword">return</span> set(id, attributes, done);
+    set: <span class="function"><span class="keyword">function</span><span class="params">(id, attrs, done)</span>{</span>
+      <span class="keyword">return</span> set(id, attrs, done);
     },
 
     inject: <span class="function"><span class="keyword">function</span><span class="params">(id, message, done)</span>{</span>
@@ -745,11 +763,11 @@ only way they should be touching the Topology</p>
         </li>
         
         
-        <li id="section-34">
+        <li id="section-35">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
+                <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
               <p>Make it run</p>
 

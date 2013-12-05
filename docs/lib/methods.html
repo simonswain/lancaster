@@ -58,7 +58,7 @@ module.exports = <span class="function"><span class="keyword">function</span><sp
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Cgeck API is up</p>
+              <p>Check API is up</p>
 
             </div>
             
@@ -66,6 +66,14 @@ module.exports = <span class="function"><span class="keyword">function</span><sp
     <span class="string">'/ping'</span>,
     <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> {</span>
       res.send(<span class="number">200</span>, {pong: <span class="keyword">new</span> Date().getTime()});
+    });
+
+  app.post (
+    <span class="string">'/reset'</span>,
+    <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> {</span>
+      api.reset(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+        res.send(<span class="number">204</span>);
+      });
     });</pre></div></div>
             
         </li>
@@ -76,25 +84,6 @@ module.exports = <span class="function"><span class="keyword">function</span><sp
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
-              </div>
-              <p>app.post (
-  ‘/reset’,
-  function(req, res) {
-    api.reset(function(){
-      res.send(204);
-    });
-  });</p>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-5">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>Inpsect nodes</p>
 
@@ -109,11 +98,11 @@ module.exports = <span class="function"><span class="keyword">function</span><sp
         </li>
         
         
-        <li id="section-6">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>Create a node</p>
 
@@ -126,16 +115,16 @@ module.exports = <span class="function"><span class="keyword">function</span><sp
         </li>
         
         
-        <li id="section-7">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>id
 fn
 sources []
-… attributes</p>
+… attrs</p>
 
             </div>
             
@@ -186,13 +175,13 @@ sources []
         </li>
         
         
-        <li id="section-8">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>Set attributes on a node</p>
+              <p>Set attrs on a node</p>
 
             </div>
             
@@ -203,11 +192,11 @@ sources []
         <span class="keyword">return</span> res.send(<span class="number">404</span>);
       }
 
-      <span class="keyword">var</span> attributes = req.body;
+      <span class="keyword">var</span> attrs = req.body;
       
       api.set(
         req.params.id, 
-        attributes, 
+        attrs, 
         <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
           res.send(<span class="number">204</span>);
       });      
@@ -217,11 +206,11 @@ sources []
         </li>
         
         
-        <li id="section-9">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>Inject a message to a node</p>
 

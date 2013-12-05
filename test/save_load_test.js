@@ -83,7 +83,7 @@ exports['rest'] = {
     });
   },
 
-  // create a node and set some attributes on it. they should still be
+  // create a node and set some attrs on it. they should still be
   // there after stop/start
 
   'save-restore-attrs': function(test) {
@@ -126,8 +126,8 @@ exports['rest'] = {
           http.get( test, 'nodes', function(res) {
             test.equal(typeof res.data, 'object');
             test.ok(res.data.hasOwnProperty('test-node'));
-            test.ok(res.data['test-node'].hasOwnProperty('attributes'));
-            test.equal(res.data['test-node']['attributes']['factor'], 10, 'should match set value');            
+            test.ok(res.data['test-node'].hasOwnProperty('attrs'));
+            test.equal(res.data['test-node']['attrs']['factor'], 10, 'should match set value');            
             next();
           });
         });     
