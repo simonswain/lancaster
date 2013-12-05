@@ -200,15 +200,29 @@ curl -i -X GET http://localhost:4002/nodes
 
 curl -i -H "Content-Type: application/json" -X POST http://localhost:4002/nodes/my-node/message -d '{"value":100}'
 
+curl -i -X GET http://localhost:4002/nodes
+
 {
   "my-node": {
     "id": "my-node",
-    "val": {
+    "message": {
       "value": 100
     },
-    "attributes": {
-      "factor": "10"
+    "attrs": {
+      "factor": 10
     }
+  },
+  "other-node": {
+    "id": "other-node",
+    "message": {
+      "value": 100
+    },
+    "attrs": {
+      "factor": 10
+    },
+    "sources": [
+      "my-node"
+    ]
   }
 }
 
