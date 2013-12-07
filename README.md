@@ -23,7 +23,8 @@ Each node processes messages it receives with a specified function,
 and outputting the result of that function.
 
 Landcaster contains a predefined set of functions for averaging,
-filtering and alerting data.
+filtering and alerting data. These operate on the `value` field of
+each message that passes through them.
 
 Some functions have parameters that control their operation.
 
@@ -56,10 +57,13 @@ npm install lancaster
 Either clone the repo, edit config.js and use `node server.js` or
 
 ```
-npm install lancaster
-var lancaster = require('lancaster');
-var server = lancaster({ ... opts ... });
+var Lancaster = require('lancaster');
+var server = new Lancaster({ ... opts ... });
+server.start();
 ```
+
+The `server` object provides and api, and a REST server is started for
+http access.
 
 ```bash
 git clone https://github.com/simonswain/lancaster.git
