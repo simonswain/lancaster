@@ -244,11 +244,11 @@ run in series when the instance is created.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
-              <p>Initialize the REST API/Socket.io server</p>
+              <p>Initialize the REST API</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> createServer = <span class="function"><span class="keyword">function</span><span class="params">(next)</span>{</span>
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> createRest = <span class="function"><span class="keyword">function</span><span class="params">(next)</span>{</span>
     rest = require(<span class="string">'./rest.js'</span>)({
       api: api,
       config: config
@@ -265,11 +265,11 @@ run in series when the instance is created.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
-              <p>Start up the REST API/Socket.io server</p>
+              <p>Start up the REST API</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> startServer = <span class="function"><span class="keyword">function</span><span class="params">(next)</span>{</span>
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> startRest = <span class="function"><span class="keyword">function</span><span class="params">(next)</span>{</span>
     rest.start(next);
   };</pre></div></div>
             
@@ -633,7 +633,7 @@ it’s process handler</p>
             
             <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> start = <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
     async.series(
-      [connect, create, loadAll, listen, createServer, startServer],
+      [connect, create, loadAll, listen, createRest, startRest],
       <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
         self.emit(<span class="string">'start'</span>);
         process.nextTick(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
