@@ -12,7 +12,7 @@ var http = require('nodeunit-httpclient').create({
 
 var Lancaster = require('../lib/lancaster.js');
 
-exports['fns'] = {
+exports['api'] = {
 
   'default': function(test) {
 
