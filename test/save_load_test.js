@@ -9,139 +9,73 @@ var http = require('nodeunit-httpclient').create({
   status: 200
 });
 
-var lancaster = require('../lib/lancaster.js');
+var Lancaster = require('../lib/lancaster.js');
 
 // create a topo, do some actions on them, stop and start the topo.
 // the data from the actions should have been persisted
 
 exports['rest'] = {
 
-  // clean up from any previous runs
-  'reset': function(test) {
-    lancaster(config, function(server){
-      server.reset(function(err){
-        server.stop(function(){
-          test.done();
-        });
-      });
-    });
-  },
-
-  // create a node, stop/start. node should still be there
+  // create a node, stop/start. node and it's attrs should still be there
   'restore': function(test) {
     test.expect(4);
-    var myServer;
-    async.series([
-      function(next){
-        lancaster(config, function(server){
-          myServer = server;
-          server.reset(function(err){
-            next();
-          });
-        });     
-      },
-      function(next){
-        http.post(
-          test,
-          'nodes', {
-            data:{
-              'id': 'test-node',
-              'factor': 10,
-              'fn': 'multiply'
-            }
-          }, {
-            status: 204
-          }, function(res) {
-            next();
-          });
-      },
-      function(next){
-        myServer.stop(function(){
-          next();
-        });
-      },
-      function(next){
-        lancaster(config, function(server){
-          myServer = server;
-          // should have reloaded nodes
-          http.get( test, 'nodes', function(res) {
-            test.equal(typeof res.data, 'object');
-            test.ok(res.data.hasOwnProperty('test-node'));
-            next();
-          });
-        });     
-      },
-      function(next){
-        myServer.reset(function(){
-          myServer.stop(function(){
-            next();
-          });
-        });
-      },
-    ], function(){
-      test.done();
-    });
-  },
 
-  // create a node and set some attrs on it. they should still be
-  // there after stop/start
+    var first = function(done){
 
-  'save-restore-attrs': function(test) {
-    test.expect(6);
-    var myServer;
-    async.series([
-      // clean state
-      function(next){
-        lancaster(config, function(server){
-          myServer = server;
-          server.reset(function(err){
-            next();
-          });
-        });     
-      },
-      function(next){
-        http.post(
-          test,
-          'nodes', {
-            data:{
+      var server = new Lancaster(config);
+
+      server.on('stop', function(){       
+        done();
+      });
+
+      server.on('start', function(){
+        async.series([
+          server.reset,
+          function(next){
+            server.add({
               'id': 'test-node',
-              'factor': 10, // this is our attr
-              'fn': 'multiply',
-            }
-          }, {
-            status: 204
-          }, function(res) {
+              'factor': 10
+            }, next);
+          },
+
+          function(next){
             next();
-          });
-      },
-      function(next){
-        myServer.stop(function(){
-          next();
-        });
-      },
-      function(next){
-        lancaster(config, function(server){
-          myServer = server;
-          // should have reloaded nodes
-          http.get( test, 'nodes', function(res) {
-            test.equal(typeof res.data, 'object');
-            test.ok(res.data.hasOwnProperty('test-node'));
-            test.ok(res.data['test-node'].hasOwnProperty('attrs'));
-            test.equal(res.data['test-node']['attrs']['factor'], 10, 'should match set value');            
+          },
+          server.stop
+        ]);
+      });
+
+      server.start();
+    };
+
+    var second = function(done){
+
+      var server = new Lancaster(config);
+
+      server.on('stop', function(){
+        test.done();
+      });
+
+      server.on('start', function(){
+        async.series([
+          function(next){
+            // should have reloaded node
+            var node = server.get('test-node');
+            test.equal(typeof node, 'object');
+            test.equal(node.id, 'test-node');
+            test.equal(typeof node.attrs, 'object');
+            test.equal(node.attrs.factor, 10);
             next();
-          });
-        });     
-      },
-      function(next){
-        myServer.reset(function(){
-          myServer.stop(function(){
-            next();
-          });
-        });
-      },
-    ], function(){
-      test.done();
-    });
+          },
+          server.stop
+        ]);
+      });
+
+      server.start();
+    };
+
+    async.series([first, second]);
+    
   }
 
 };

@@ -8,124 +8,192 @@ var http = require('nodeunit-httpclient').create({
   status: 200
 });
 
-var lancaster = require('../lib/lancaster.js');
+var Lancaster = require('../lib/lancaster.js');
 
 exports['rest'] = {
 
   'server-start-stop': function(test) {
-    lancaster(config, function(server){
-      server.stop(function(){
-        test.done();
+
+    var server = new Lancaster(config);
+
+    server.on('stop', function(){
+      test.done();
+    });
+
+    server.on('start', function(){
+      server.reset(function(){
+        server.stop();
       });
     });
+    
+    server.start();
+
   },
 
   'ping': function(test) {
+
     test.expect(2);
-    lancaster(config, function(server){
-      http.get( test, 'ping', function(res) {
-        test.ok(res.data.hasOwnProperty('pong'), 'Got Pong back from Ping');
-        server.stop(function(){
-          test.done();
+
+    var server = new Lancaster(config);
+
+    server.on('stop', function(){
+      test.done();
+    });
+
+    server.on('start', function(){
+      server.reset(function(){
+        http.get( test, 'ping', function(res) {
+          test.ok(res.data.hasOwnProperty('pong'), 'Got Pong');
+          server.stop();
         });
       });
     });
+    
+    server.start();
+
   },
 
   'inspect': function(test) {
+
     test.expect(2);
-    lancaster(config, function(server){
-      http.get( test, 'nodes', function(res) {
-        test.equal(typeof res.data, 'object');
-        server.stop(function(){
-          test.done();
+
+    var server = new Lancaster(config);
+
+    server.on('stop', function(){
+      test.done();
+    });
+
+    server.on('start', function(){
+      server.reset(function(){
+        http.get( test, 'nodes', function(res) {
+          test.equal(typeof res.data, 'object');
+          server.stop();
         });
       });
     });
+    
+    server.start();
+
   },
 
   'get-non-existant-node': function(test) {
     test.expect(1);
-    lancaster(config, function(server){
-      http.get( 
-        test, 
-        'nodes/bogus', 
-        {}, 
-        {
-          status: 404
-        }, 
-        function(res) {
-          server.stop(function(){
-            test.done();
-          });
-        });
+
+    var server = new Lancaster(config);
+
+    server.on('stop', function(){
+      test.done();
     });
+
+    server.on('start', function(){
+      server.reset(function(){
+        http.get( 
+          test, 
+          'nodes/bogus', 
+          {}, 
+          {
+            status: 404
+          }, 
+          function(res) {
+            server.stop();
+          });
+      });
+    });
+    
+    server.start();
+
   },
 
   'create-node': function(test) {
     test.expect(4);
-    lancaster(config, function(server){
-      http.post(
-        test, 
-        'nodes', {
-          data:{
-            'id': 'test-node'
-          }
-        }, {
-          status: 204
-        }, function(res) {
 
-          // inpsect to check nodes were created
-          http.get( test, 'nodes', function(res) {
-            test.equal(typeof res.data, 'object');
-            test.ok(res.data.hasOwnProperty('test-node'));
-            server.stop(function(){
-              test.done();
+    var server = new Lancaster(config);
+
+    server.on('stop', function(){
+      test.done();
+    });
+
+    server.on('start', function(){
+      server.reset(function(){
+        http.post(
+          test, 
+          'nodes', {
+            data:{
+              'id': 'test-node'
+            }
+          }, {
+            status: 204
+          }, function(res) {
+
+            // inpsect to check nodes were created
+            http.get( test, 'nodes', function(res) {
+              test.equal(typeof res.data, 'object');
+              test.ok(res.data.hasOwnProperty('test-node'));
+              server.stop();
             });
+
           });
 
-        });
+      });
     });
+    
+    server.start();
+
   },
 
   'delete-node': function(test) {
     test.expect(5);
 
-    lancaster(config, function(server){
-      // create
-      http.post(
-        test, 
-        'nodes', {
-          data:{
-            'id': 'test-node'
-          }
-        }, {
-          status: 204
-        }, function(res) {
+    var server = new Lancaster(config);
 
-          http.del(
-            test, 
-            'nodes/test-node', 
-            {},
-            {status: 204},
-            function(res) {
+    server.on('stop', function(){
+      test.done();
+    });
 
-              http.get( test, 'nodes', function(res) {
-                test.equal(typeof res.data, 'object');
-                test.equal(res.data.hasOwnProperty('test-node'), false);
-                server.stop(function(){
-                  test.done();
+    server.on('start', function(){
+      server.reset(function(){
+        http.post(
+          test, 
+          'nodes', {
+            data:{
+              'id': 'test-node'
+            }
+          }, {
+            status: 204
+          }, function(res) {
+
+            http.del(
+              test, 
+              'nodes/test-node', 
+              {},
+              {status: 204},
+              function(res) {
+
+                http.get( test, 'nodes', function(res) {
+                  test.equal(typeof res.data, 'object');
+                  test.equal(res.data.hasOwnProperty('test-node'), false);
+                  server.stop();
                 });
               });
-            });
 
-        });
+          });
+      });
     });
+    
+    server.start();
+
   },
 
   'inject': function(test) {
     //test.expect(5);
-    lancaster(config, function(server){
+
+    var server = new Lancaster(config);
+
+    server.on('stop', function(){
+      test.done();
+    });
+
+    server.on('start', function(){
       server.reset(function(){
         http.post(
           test, 
@@ -154,17 +222,16 @@ exports['rest'] = {
                     // should have latched most recent processed
                     // message
                     test.deepEqual(res.data.message, myMessage);
-                    server.reset(function(){
-                      server.stop(function(){
-                        test.done();
-                      });
-                    });
+                    server.stop();
                   });
                 
               });
           });
-      });      
+      });
     });
+    
+    server.start();
+
   },
 
 };

@@ -54,12 +54,10 @@ fns.thru = {
 
 fns.count = {
   init: <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
-    console.log(<span class="string">'###############'</span>);
     <span class="keyword">this</span>.count = <span class="number">0</span>;
     done();
   },
   process: <span class="function"><span class="keyword">function</span><span class="params">(message, done)</span>{</span>
-    console.log(<span class="string">'***************'</span>, <span class="keyword">this</span>.count, <span class="keyword">this</span>.message);
     <span class="keyword">this</span>.count ++;
     <span class="keyword">return</span> done(<span class="literal">null</span>, {count: <span class="keyword">this</span>.count});
   }

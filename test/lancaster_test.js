@@ -9,13 +9,25 @@ exports['lancaster'] = {
     test.equal( typeof Lancaster, 'function', 'should be a function');
     test.done();
   },
-  // clean up from any previous runs
+
   'create': function(test) {
-    Lancaster(config, function(server){
+    test.expect(3);
+    var server = new Lancaster(config);
+
+    server.on('start', function(){
+      test.ok(true);
+    });
+
+    server.on('stop', function(){
+      test.ok(true);
+      test.done();
+    });
+
+    server.start(function(){
+      test.ok(true);
       server.stop(function(){
-        test.done();
       });
     });
-  },
+  }
 
 };
