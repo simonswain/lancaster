@@ -64,6 +64,10 @@ exports['fns'] = {
     lancaster(config, function(server){
       server.reset(function(){
 
+        server.on('message', function(emit){
+          console.log('GOT EMIT', emit);
+        });
+
         var add = function(node, done){
           http.post(
             test, 
@@ -92,12 +96,13 @@ exports['fns'] = {
             }, {
               id:'sum', 
               fn:'count',
-              sources: ['count-1','count-2']
+              sources: ['count-2','count-1']
             }], add, done);
         };
 
 
         var inject = function(x, done){
+          //console.log('nodes/' + x.id + '/message', x.msg);
           http.post(
             test, 
             'nodes/' + x.id + '/message', 
@@ -111,10 +116,16 @@ exports['fns'] = {
         var injects = function(done){
           async.eachSeries(
             [{
-              id: 'count-1',
+              id: 'count-2',
               msg: {value:100}
             }, {
-              id: 'count-1',
+              id: 'count-2',
+              msg: {value:101}
+            }, {
+              id: 'count-2',
+              msg: {value:101}
+            }, {
+              id: 'count-2',
               msg: {value:101}
             }, {
               id: 'count-1',
