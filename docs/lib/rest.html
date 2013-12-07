@@ -85,7 +85,7 @@
 
   app.use(clientErrorHandler);
   app.use(app.router);
-  routes = require(<span class="string">'./methods.js'</span>)(app, opts);
+  routes = require(<span class="string">'./rest-routes.js'</span>)(app, opts);
 
   <span class="keyword">var</span> start = <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
     <span class="keyword">var</span> listen;
