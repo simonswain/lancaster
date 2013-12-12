@@ -52,4 +52,51 @@ exports['nodes'] = {
 
   },
 
+  'set-get': function(test) {
+    test.expect(1);
+
+    var server = new Lancaster(config);
+
+    server.on('stop', function(){
+      test.done();
+    });
+
+    server.on('start', function(){
+      async.series([
+        server.reset,
+
+        function(next){
+          server.add({
+            'id': 'counter',
+            'fn': 'count',
+            'myval': 1
+          }, next);
+        },
+
+        // add dup node
+        function(next){
+          server.set(
+            'counter', {
+              'myval': '2'
+            }, 
+            next
+          );
+        },
+
+        // add dup node
+        function(next){
+          server.fetch(
+            'counter', 
+            function(err, node){
+              test.equals(node.attrs.myval, 2);
+              server.stop();
+            });
+        }
+      ]);
+
+    });
+
+    server.start();
+
+  },
 };
