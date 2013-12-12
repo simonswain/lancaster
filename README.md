@@ -157,9 +157,22 @@ GET /nodes/:id/message
 ## curl examples
 
 ```bash
+./lancaster start
+
 curl -i -X GET http://localhost:4002/ping
+
+{
+  "pong": 1386800817607
+}
+
 curl -i -X GET http://localhost:4002/nodes
+
+{}
+
+
 curl -i -X GET http://localhost:4002/nodes/unknown-node
+
+HTTP/1.1 404 Not Found
 
 curl -i -H "Content-Type: application/json" -X POST http://localhost:4002/nodes/ -d '{"id":"my-node", "fn":"multiply","factor":10}'
 
