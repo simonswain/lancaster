@@ -61,6 +61,17 @@ fns.count = {
     <span class="keyword">this</span>.count ++;
     <span class="keyword">return</span> done(<span class="literal">null</span>, {count: <span class="keyword">this</span>.count});
   }
+};
+
+fns.scale = {
+  init: <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
+    <span class="keyword">this</span>.factor = <span class="number">1</span>;
+    done();
+  },
+  process: <span class="function"><span class="keyword">function</span><span class="params">(message, done)</span>{</span>
+    <span class="keyword">this</span>.count ++;
+    <span class="keyword">return</span> done(<span class="literal">null</span>, {count: <span class="keyword">this</span>.count});
+  }
 };</pre></div></div>
             
         </li>
