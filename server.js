@@ -7,6 +7,7 @@ server.on('stop', function(){
 });
 
 server.on('start', function(){
+  server.startProcessing();
 });
 
 // handle shutdown gracefully

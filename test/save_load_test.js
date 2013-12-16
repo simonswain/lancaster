@@ -3,20 +3,16 @@
 var async = require('async');
 var config = require('../config.js');
 
-var http = require('nodeunit-httpclient').create({
-  port: config.port,
-  path: '/',
-  status: 200
-});
-
 var Lancaster = require('../lib/lancaster.js');
 
 // create a topo, do some actions on them, stop and start the topo.
 // the data from the actions should have been persisted
 
-exports['rest'] = {
+exports['save-load'] = {
 
-  // create a node, stop/start. node and it's attrs should still be there
+  // create a node, stop/start. node and it's attrs should still be
+  // there
+
   'restore': function(test) {
     test.expect(4);
 
@@ -33,8 +29,10 @@ exports['rest'] = {
           server.reset,
           function(next){
             server.add({
-              'id': 'test-node',
-              'factor': 10
+              id: 'test-node',
+              attrs:{
+                factor: 10
+              }
             }, next);
           },
 
@@ -60,18 +58,23 @@ exports['rest'] = {
         async.series([
           function(next){
             // should have reloaded node
-            var node = server.get('test-node');
-            test.equal(typeof node, 'object');
-            test.equal(node.id, 'test-node');
-            test.equal(typeof node.attrs, 'object');
-            test.equal(node.attrs.factor, 10);
-            next();
+            server.get(
+              'test-node',
+              function(err, node){
+                test.equal(typeof node, 'object');
+                test.equal(node.id, 'test-node');
+                test.equal(typeof node.attrs, 'object');
+                test.equal(node.attrs.factor, 10);
+                next();
+              });
+
           },
           server.stop
         ]);
       });
 
       server.start();
+      
     };
 
     async.series([first, second]);
