@@ -8,47 +8,40 @@ Lancaster provides a REST based application server that lets you
 configure processing topologies you inject data into and recieve
 results from.
 
-Lancaster is designed to work with messages containing a time (UTC
-epoch milliseconds) and a value (Number)
-
-```json
+```javascript
+// example message
 {at: 1386197370482, value: 100.00}
 ```
 
 Running the Lancaster server provids you with an empty topology.
 
-You create nodes in the Lancaster topology.
+You create nodes in the Lancaster topology. 
 
-Each node processes messages it receives with a specified function,
-and outputting the result of that function.
+Any node in the toplogy can have a message injected in to it.
 
-Landcaster contains a predefined set of functions for averaging,
-filtering and alerting data. These operate on the `value` field of
-each message that passes through them.
+Each node has a procssing function that is applied to messages is
+receives. The default function is a passthru that outputs the same
+message it receives.
 
-Some functions have parameters that control their operation.
+Nodes can have attributes set on them that can be changed at any time,
+and can be used or changed by the node's function.
 
-Once set for a node a function cannot be changed, but parameters can
-be adjusted.
-
-Some functions are stateful (eg average over time) and such state is
-stored and will be retrieved in case of restarting the server.
+A predefined set of functions is available. User defined functions can
+be provided to the topology as part of it's configuraion.
 
 A node can have any number of source nodes, allowing you to create
 signal processing and switching chains, and combine multiple inputs in
 to a single output stream.
 
-Any node in the toplogy can have a value injected in to it.
+The topology can be managed via Node.js or a REST API.
 
-All data points (outputs of nodes) are stored and history of a node
-can be retrieved.
+Results can be streamed out in real time via a Node.js event emitter
+or over http via sock.js.
 
-Results can be streamed out in real time via sock.js.
 
 ## Installing
 
-Landcaster requires Redis and Cassandra
-
+Landcaster requires Redis.
 
 ```bash
 npm install lancaster
@@ -58,8 +51,13 @@ Either clone the repo, edit config.js and use `node server.js` or
 
 ```
 var Lancaster = require('lancaster');
-var server = new Lancaster({ ... opts ... });
+var config = require('config.js');
+var server = new Lancaster(config);
 server.start();
+server.on('start', function(){
+  // do stuff
+});
+
 ```
 
 The `server` object provides and api, and a REST server is started for
@@ -74,6 +72,10 @@ node server
 ```
 
 ## REST methods
+
+
+REST NOTES BELOW ARE OUT OF DATE
+
 
 Ping test to check server is up
 ```
@@ -123,7 +125,7 @@ used for attrs. Attrs will be used by the fn to control it's
 operation.
 
 
-Change attributes on a node. Cannot change `id`, `sources` or `fn`
+Change attrs on a node. Cannot change `id`, `sources` or `fn`
 ```
 POST /nodes/:id
 
@@ -181,7 +183,7 @@ curl -i -X GET http://localhost:4002/nodes/my-node
 {
   "my-node": {
     "id": "my-node",
-    "attributes": {
+    "attrs": {
       "factor": "10"
     }
   }
@@ -197,7 +199,7 @@ curl -i -X GET http://localhost:4002/nodes
 {
   "my-node": {
     "id": "my-node",
-    "attributes": {
+    "attrs": {
       "factor": 10
     },
     "sources": [
@@ -206,7 +208,7 @@ curl -i -X GET http://localhost:4002/nodes
   },
   "other-node": {
     "id": "other-node",
-    "attributes": {
+    "attrs": {
       "factor": 10
     },
     "sources": [
