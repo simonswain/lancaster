@@ -264,7 +264,7 @@ exports['nodes'] = {
 
 
   'add-with-sources': function(test) {
-    test.expect(2);
+    test.expect(3);
 
     var server = new Lancaster(config);
 
@@ -294,7 +294,8 @@ exports['nodes'] = {
               'test', 
               function(err, node){
                 test.equals(node.id, 'test');
-                test.deepEqual(node.sources, mysources);
+                test.ok(node.sources.indexOf(mysources[0]) > -1);
+                test.ok(node.sources.indexOf(mysources[1]) > -1);
                 next();
               });
           }
