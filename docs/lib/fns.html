@@ -34,44 +34,29 @@
 
 <span class="keyword">var</span> fns = module.exports = {};
 
-fns.<span class="keyword">default</span> = {
-  init: <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
-    done();
-  },
-  process: <span class="function"><span class="keyword">function</span><span class="params">(message, done)</span>{</span>
-    done(<span class="literal">null</span>, message);
-  },
-  stop: <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
-    done();
-  }
-};
-
 fns.thru = {
-  process: <span class="function"><span class="keyword">function</span><span class="params">(message, done)</span>{</span>
-    <span class="keyword">return</span> done(<span class="literal">null</span>, message);
+
+  process: <span class="function"><span class="keyword">function</span><span class="params">(attrs, message, done)</span>{</span>
+    done(<span class="literal">null</span>, attrs, message);
   }
+
 };
 
 fns.count = {
-  init: <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
-    <span class="keyword">this</span>.count = <span class="number">0</span>;
-    done();
-  },
-  process: <span class="function"><span class="keyword">function</span><span class="params">(message, done)</span>{</span>
-    <span class="keyword">this</span>.count ++;
-    <span class="keyword">return</span> done(<span class="literal">null</span>, {count: <span class="keyword">this</span>.count});
-  }
-};
 
-fns.scale = {
+  attrs: {
+    total: <span class="number">0</span>
+  },
+
   init: <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
-    <span class="keyword">this</span>.factor = <span class="number">1</span>;
     done();
   },
-  process: <span class="function"><span class="keyword">function</span><span class="params">(message, done)</span>{</span>
-    <span class="keyword">this</span>.count ++;
-    <span class="keyword">return</span> done(<span class="literal">null</span>, {count: <span class="keyword">this</span>.count});
+
+  process: <span class="function"><span class="keyword">function</span><span class="params">(attrs, message, done)</span>{</span>
+    attrs.total ++;
+    done(<span class="literal">null</span>, attrs, {total:attrs.total});
   }
+
 };</pre></div></div>
             
         </li>
