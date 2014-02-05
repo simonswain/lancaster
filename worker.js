@@ -1,19 +1,21 @@
+// Command line runner for worker
+
 var config = require('./config.js');
 var Lancaster = require('./index.js');
-var server = new Lancaster.Server(config);
+var worker = new Lancaster.Worker(config);
 
-server.on('stop', function(){
+worker.on('stop', function(){
   process.exit(0);
 });
 
-server.on('start', function(){
-  server.startProcessing();
+worker.on('start', function(){
+  worker.startProcessing();
 });
 
 // handle shutdown gracefully
 process.on( 'SIGINT', function() {
   console.log( "\nShutting Down..." );
-  server.stop();
+  worker.stop();
 });
 
-server.start();
+worker.start();

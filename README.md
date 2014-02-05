@@ -1,6 +1,6 @@
 # Lancaster
 
-Version 0.0.1
+Version 0.0.2
 
 [![Build Status](https://travis-ci.org/simonswain/lancaster.png)](https://travis-ci.org/simonswain/lancaster)
 
@@ -71,7 +71,51 @@ cp config.sample.js config.js
 node server
 ```
 
-## REST methods
+## Topology methods
+
+quit  (done)
+
+reset (done)
+
+setAttrs (id, attrs, done)
+
+getAttrs (id, done)
+
+attrs (id, attrs, done)
+
+delAttrs (id, done)
+
+addSource (id, source_id, done)
+
+delSource (id, source_id, done)
+
+getSources (id, done)
+
+delSources (id, done) 
+
+getTargets (id, done)
+
+setData (id, data, done)
+
+getData (id, done)
+
+setSources (id, sources, done)
+
+get (id, done)
+
+all (done)
+
+add (node, done)
+
+del (id, done)
+
+inject (id, data, done)
+
+extract (done)
+
+
+
+## Server REST methods
 
 
 REST NOTES BELOW ARE OUT OF DATE

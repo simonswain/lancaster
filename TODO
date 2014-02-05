@@ -1,0 +1,40 @@
+//Nodes created/destroyed for each message. Pull attrs from redis,
+save back when done
+
+
+
+// redis prefix
+
+// save/restore nodes + opts from redis
+
+// test command line rest
+
+// rename attributes to attrs
+
+// rename val/latch to message
+
+// start/process/stop
+
+// don't allow create dup node
+
+// sources via rest
+
+complex topology tests
+
+node fn types and implementations
+
+define transforms available to nodes. create plugin system
+
+store node outputs to cassandra
+
+publish node history via api
+
+//streaming data out via sock.js 
+
+streaming data out via redis pubsub
+
+queries in via sock.js
+
+some way of showing the path input to a specific node follows
+
+// what happens if you add a dup node_id? should be error
