@@ -318,7 +318,7 @@ exports['topology'] = {
         test.equals(err, null);
         test.done();
       }
-    )
+    );
 
   },
 
@@ -331,7 +331,7 @@ exports['topology'] = {
         test.deepEqual(data, myData);
         test.done();
       }
-    )
+    );
 
   },
 
