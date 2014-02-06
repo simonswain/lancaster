@@ -1,53 +1,51 @@
 "use strict";
 
-// var async = require('async');
+var async = require('async');
+var _ = require('underscore');
 
-// var Lancaster = require('../index.js');
-// var config = require('../config.js');
+var fns = require('../lib/fns.js')
 
-// exports['nodes'] = {
+var myAttrs, myMessage
 
-//   'add-with-defaults': function(test) {
-//     test.expect(2);
+exports['fns'] = {
 
-//     var server = new Lancaster(config);
+  'thru': function(test){
+    test.expect(2);
 
-//     server.on('stop', function(){
-//       test.done();
-//     });
+    myAttrs = {};
+    myMessage = {
+      foo: 'bar'
+    };
 
-//     server.on(
-//       'start',
-//       function(){
-//         async.series([
-//           server.reset,
+    fns.thru.process(
+      myAttrs,
+      myMessage,
+      function(err, attrs, message){
+        test.deepEqual(attrs, myAttrs);
+        test.deepEqual(message, myMessage);
+        test.done();
+      });
+    
+  },
 
-//           function(next){
-//             server.add({
-//               id: 'counter',
-//               fn: 'count'
-//             }, function(err){
-//               next();
-//             });
-//           },
+  'count': function(test){
+    test.expect(2);
 
-//           function(next){
-//             server.get(
-//               'counter',
-//               function(err, node){
-//                 test.equals(node.id, 'counter');
-//                 test.deepEqual(node.attrs, {total: 0});
-//                 next();
-//               });
-//           }
-//         ], function(err){
-//           server.stop();
-//         });
-//       });
+    myAttrs = _.clone(fns.count.attrs);
 
-//     server.start();
+    myMessage = {
+      foo: 'bar'
+    };
 
-//   },
+    fns.count.process(
+      myAttrs,
+      myMessage,
+      function(err, attrs, message){
+        test.equal(attrs.total, 1);
+        test.equal(message.total, 1);
+        test.done();
+      });
+    
+  }
 
-
-// };
+};
