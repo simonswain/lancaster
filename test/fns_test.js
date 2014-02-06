@@ -3,9 +3,9 @@
 var async = require('async');
 var _ = require('underscore');
 
-var fns = require('../lib/fns.js')
+var fns = require('../lib/fns.js');
 
-var myAttrs, myMessage
+var myAttrs, myMessage;
 
 exports['fns'] = {
 
