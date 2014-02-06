@@ -45,56 +45,56 @@ exports['process'] = {
 
   },
 
-  // 'add-node': function(test) {
-  //   myNode = {
-  //     id: 'test',
-  //     fn: 'thru'
-  //   };
-  //   topo.add(myNode, function(){
-  //     test.done();
-  //   });
-  // },
+  'add-node': function(test) {
+    myNode = {
+      id: 'test',
+      fn: 'thru'
+    };
+    topo.add(myNode, function(){
+      test.done();
+    });
+  },
 
-  // 'get-data-pre': function(test) {
-  //   //test.expect(1);
-  //   topo.getData(
-  //     myNode.id, 
-  //     function(err, data){
-  //       test.equals(data, null);
-  //       test.done();
-  //     });
-  // }, 
+  'get-data-pre': function(test) {
+    //test.expect(1);
+    topo.getData(
+      myNode.id, 
+      function(err, data){
+        test.equals(data, null);
+        test.done();
+      });
+  }, 
 
-  // 'inject': function(test){
-  //   topo.inject(
-  //     myNode.id,
-  //     myData,
-  //     function(err){
-  //       test.done();
-  //     }
-  //   );
-  // },
+  'inject': function(test){
+    topo.inject(
+      myNode.id,
+      myData,
+      function(err){
+        test.done();
+      }
+    );
+  },
 
-  // 'worker-tick': function(test) {
-  //   test.expect(1);
-  //   worker.tick(
-  //     function(err, id, output){
-  //       // check fn passed thru
-  //       test.deepEqual(output, myData);
-  //       test.done();
-  //     });
-  // }, 
+  'worker-tick': function(test) {
+    test.expect(1);
+    worker.tick(
+      function(err, id, output){
+        // check fn passed thru
+        test.deepEqual(output, myData);
+        test.done();
+      });
+  }, 
 
-  // // output should have been latched on node
-  // 'get-data-post': function(test) {
-  //   test.expect(1);
-  //   topo.getData(
-  //     myNode.id, 
-  //     function(err, data){
-  //       test.deepEqual(data, myData);
-  //       test.done();
-  //     });
-  // }, 
+  // output should have been latched on node
+  'get-data-post': function(test) {
+    test.expect(1);
+    topo.getData(
+      myNode.id, 
+      function(err, data){
+        test.deepEqual(data, myData);
+        test.done();
+      });
+  }, 
 
 
   'send-receive': function(test){
