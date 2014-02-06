@@ -168,152 +168,107 @@ exports['process'] = {
 
   },
 
-  // 'count': function(test) {
-  //   test.expect(3);
 
-  //   var myMessage = {value: 1000.00};
+  'count-parallel': function(test){
+    //test.expect(5);
 
-  //   var server = new Lancaster(config);
 
-  //   server.on('stop', function(){
-  //     test.done();
-  //   });
-
-  //   server.on('message', function(msg){
-  //     // got message from event
-  //     test.deepEqual(msg.data, {total:1} );
-
-  //     server.get('counter', function(err, node){
-  //       // message was latched on node
-  //       test.deepEqual(node.data, {total:1});
-
-  //       // total was accumulated on attrs
-  //       test.deepEqual(node.attrs, {total:1});
-  //       server.stop();
-  //     });
-  //   });
-
-  //   server.on('start', function(){
-  //     async.series([
-  //       server.reset,
-  //       function(next){
-  //         server.add({
-  //           'id': 'counter', 
-  //           'fn': 'count'
-  //         }, next);
-  //       },
-  //       function(next){
-  //         server.inject('counter', myMessage, next);
-  //       }
-  //     ]);
-
-  //   });
+    var add = function(node, done){
+      topo.add({
+        'id': node.id, 
+        'fn': node.fn,
+        'sources': node.sources
+      }, done);
+    };
     
-  //   server.start(function(){
-  //     server.startProcessing();
-  //   });
+    var adds = function(done){
+      async.eachSeries([
+        {
+          id:'count-1', 
+          fn:'count'
+        },
+        {
+          id:'count-2', 
+          fn:'count'
+        }, {
+          id:'sum', 
+          fn:'count',
+          sources: ['count-1','count-2']
+        }], add, done);
+    };
 
-  // },
+    var inject = function(x, done){
+      topo.inject(x.id, x.msg, done);
+    };
 
-  // // two counts running in parallel
-  // 'count-two': function(test) {
-  //   test.expect(1);
-
-  //   var server = new Lancaster(config);
-
-  //   server.on('stop', function(){
-  //     test.done();
-  //   });
-
-  //   var expect = 10;
-  //   var got = 0;
-
-  //   server.on('message', function(msg){
-      
-  //     //console.log('MESSAGE', msg);
-
-  //     if(msg.id !== 'sum'){
-  //       return;
-  //     }
-
-  //     if(msg.data.total <5){
-  //       return;
-  //     }
-
-  //     test.ok(true);
-  //     server.stop();
-        
-  //   });
-
-  //   server.on('start', function(){
-
-  //       var add = function(node, done){
-  //         server.add({
-  //           'id': node.id, 
-  //           'fn': node.fn,
-  //           'sources': node.sources
-  //         }, done);
-  //       };
-      
-  //       var adds = function(done){
-  //         async.eachSeries([
-  //           {
-  //             id:'count-1', 
-  //             fn:'count'
-  //           },
-  //           {
-  //             id:'count-2', 
-  //             fn:'count'
-  //           }, {
-  //             id:'sum', 
-  //             fn:'count',
-  //             sources: ['count-1','count-2']
-  //           }], add, done);
-  //       };
-
-
-  //       var inject = function(x, done){
-  //         server.inject(x.id, x.msg, done);
-  //       };
-      
-  //       var injects = function(done){
-  //         async.eachSeries(
-  //           [{
-  //             id: 'count-2',
-  //             msg: {value:100}
-  //           }, {
-  //             id: 'count-2',
-  //             msg: {value:101}
-  //           }, {
-  //             id: 'count-2',
-  //             msg: {value:101}
-  //           }, {
-  //             id: 'count-2',
-  //             msg: {value:101}
-  //           }, {
-  //             id: 'count-1',
-  //             msg: {value:102}
-  //           }],
-  //           inject,
-  //           done);
-  //       };
-
-  //       async.series([
-  //         server.reset,
-  //         adds,
-  //         injects
-  //       ]);
-
-  //   });
+    // the values don't matter. just handy for tracking flow throught redis
+    var messages = [{
+      id: 'count-2',
+      msg: {value:100}
+    }, {
+      id: 'count-2',
+      msg: {value:101}
+    }, {
+      id: 'count-2',
+      msg: {value:101}
+    }, {
+      id: 'count-2',
+      msg: {value:101}
+    }, {
+      id: 'count-1',
+      msg: {value:102}
+    }];
     
-  //   server.start(function(){
-  //     server.startProcessing();
-  //   });
+    var injects = function(done){
+      async.eachSeries(
+        messages,
+        inject,
+        function(){
+          done();
+        });
+    };
 
-  //},
+    var run = function(done){
+      async.timesSeries(
+        messages.length, 
+        function(x, next){
+          worker.tick(function(err, id, output){
+            next();
+          });
+        }, function(){
+          done();
+        });
+    };
+    
+
+    // count should have accumulated on node
+    var check = function(done){
+    topo.get(
+      'count-2', 
+      function(err, node){
+        test.equal(node.attrs.total, 4);
+        done();
+      });
+    };
+
+    async.series([
+      function(next){ 
+        topo.reset(function(){
+          next();
+        });
+      },
+      adds,
+      injects,
+      run,
+      check
+    ], function(){
+      test.done();
+    });
 
 
-    // clean up after ourselves
+  },
+
+  // clean up after ourselves
   'reset-final': function(test) {
 
     // stub test to copy and change
