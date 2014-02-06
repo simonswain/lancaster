@@ -10,23 +10,18 @@ var topo, myNode;
 exports['topology'] = {
 
   'create': function(test) {
-
-    // stub test to copy and change
     topo = new Lancaster.Topology(
       config,
       function(){
         test.done();
       });
-
   },
-  'reset': function(test) {
 
-    // stub test to copy and change
+  'reset': function(test) {
     topo.reset(
       function(){
         test.done();
       });
-
   },
 
   'nodes-none': function(test) {
@@ -282,7 +277,7 @@ exports['topology'] = {
         topo.getSources(
           myNode.id, 
           function(err, sources){
-            test.equals(sources.length, 0)
+            test.equals(sources.length, 0);
             test.done();
           });
         
@@ -303,24 +298,69 @@ exports['topology'] = {
         topo.getData(
           myNode.id, 
           function(err, data){
-            test.deepEqual(data, myData)
+            test.deepEqual(data, myData);
             test.done();
           });
         
       });
   },
 
+  'inject': function(test){
+    test.expect(1);
 
-  // inject
+    myData = {value: 1000.00};
+    myId = 'test-id';
 
-  // extract
+    topo.inject(
+      myId,
+      myData,
+      function(err){
+        console.log(err);
+        test.equals(err, null);
+        test.done();
+      }
+    )
 
-  // process
+  },
 
+  'extract': function(test){
+    test.expect(3);
+    topo.extract(
+      function(err, id, data){
+        test.equals(err, null);
+        test.equals(id, myId);
+        test.deepEqual(data, myData);
+        test.done();
+      }
+    )
+
+  },
+
+  'purge': function(test){
+    test.expect(3);
+
+    topo.inject(
+      myId,
+      myData,
+      function(err){
+
+        topo.purge(
+          function(err){
+
+            topo.extract(
+              function(err, id, data){
+                test.equals(err, null);
+                test.equals(id, null);
+                test.equals(data, null);
+                test.done();
+              });
+          });
+      });
+
+  },
 
   'reset-final': function(test) {
 
-    // stub test to copy and change
     topo.reset(
       function(){
         test.done();
