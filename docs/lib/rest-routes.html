@@ -30,11 +30,11 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-pi">"use strict"</span>;
+            <div class="content"><div class='highlight'><pre><span class="string">"use strict"</span>;
 
-module.exports = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(app, opts)</span>{</span>
+module.exports = <span class="function"><span class="keyword">function</span><span class="params">(app, opts)</span>{</span>
 
-  <span class="hljs-keyword">var</span> api = opts.api;</pre></div></div>
+  <span class="keyword">var</span> api = opts.api;</pre></div></div>
             
         </li>
         
@@ -63,16 +63,16 @@ module.exports = <span class="hljs-function"><span class="hljs-keyword">function
             </div>
             
             <div class="content"><div class='highlight'><pre>  app.get (
-    <span class="hljs-string">'/ping'</span>,
-    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res)</span> {</span>
-      res.send(<span class="hljs-number">200</span>, {pong: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>().getTime()});
+    <span class="string">'/ping'</span>,
+    <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> {</span>
+      res.send(<span class="number">200</span>, {pong: <span class="keyword">new</span> Date().getTime()});
     });
 
   app.post (
-    <span class="hljs-string">'/reset'</span>,
-    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res)</span> {</span>
-      api.reset(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
-        res.send(<span class="hljs-number">204</span>);
+    <span class="string">'/reset'</span>,
+    <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> {</span>
+      api.reset(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+        res.send(<span class="number">204</span>);
       });
     });</pre></div></div>
             
@@ -90,9 +90,9 @@ module.exports = <span class="hljs-function"><span class="hljs-keyword">function
             </div>
             
             <div class="content"><div class='highlight'><pre>  app.get (
-    <span class="hljs-string">'/nodes'</span>,
-    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res)</span> {</span>
-      res.send(<span class="hljs-number">200</span>, api.inspect());
+    <span class="string">'/nodes'</span>,
+    <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> {</span>
+      res.send(<span class="number">200</span>, api.inspect());
     });</pre></div></div>
             
         </li>
@@ -109,8 +109,8 @@ module.exports = <span class="hljs-function"><span class="hljs-keyword">function
             </div>
             
             <div class="content"><div class='highlight'><pre>  app.post (
-    <span class="hljs-string">'/nodes'</span>,
-    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res)</span> {</span></pre></div></div>
+    <span class="string">'/nodes'</span>,
+    <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> {</span></pre></div></div>
             
         </li>
         
@@ -129,45 +129,45 @@ sources []
             </div>
             
             <div class="content"><div class='highlight'><pre>
-      <span class="hljs-keyword">if</span>(!req.body.hasOwnProperty(<span class="hljs-string">'id'</span>)){
-        <span class="hljs-keyword">return</span> res.send(<span class="hljs-number">400</span>);
+      <span class="keyword">if</span>(!req.body.hasOwnProperty(<span class="string">'id'</span>)){
+        <span class="keyword">return</span> res.send(<span class="number">400</span>);
       }
 
-      <span class="hljs-keyword">var</span> node = {
+      <span class="keyword">var</span> node = {
         sources: []
       };
 
-      <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> key <span class="hljs-keyword">in</span> req.body){
+      <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> req.body){
         node[key] = req.body[key];
       }
 
-      api.add(node, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
-        res.send(<span class="hljs-number">204</span>);
+      api.add(node, <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+        res.send(<span class="number">204</span>);
       });
 
     });
 
   app.get (
-    <span class="hljs-string">'/nodes/:id'</span>,
-    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res)</span> {</span>
-      api.fetch(req.params.id, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, node)</span>{</span>
-        <span class="hljs-keyword">if</span>(!node){
-          <span class="hljs-keyword">return</span> res.send(<span class="hljs-number">404</span>);
+    <span class="string">'/nodes/:id'</span>,
+    <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> {</span>
+      api.fetch(req.params.id, <span class="function"><span class="keyword">function</span><span class="params">(err, node)</span>{</span>
+        <span class="keyword">if</span>(!node){
+          <span class="keyword">return</span> res.send(<span class="number">404</span>);
         }
-        res.send(<span class="hljs-number">200</span>, node);
+        res.send(<span class="number">200</span>, node);
       });
     });
 
   app.del (
-    <span class="hljs-string">'/nodes/:id'</span>,
-    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res)</span> {</span>
+    <span class="string">'/nodes/:id'</span>,
+    <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> {</span>
 
-      <span class="hljs-keyword">if</span>(!api.get(req.params.id)){
-        <span class="hljs-keyword">return</span> res.send(<span class="hljs-number">404</span>);
+      <span class="keyword">if</span>(!api.get(req.params.id)){
+        <span class="keyword">return</span> res.send(<span class="number">404</span>);
       }
 
-      api.remove(req.params.id, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
-        res.send(<span class="hljs-number">204</span>);
+      api.remove(req.params.id, <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+        res.send(<span class="number">204</span>);
       });
 
     });</pre></div></div>
@@ -186,19 +186,19 @@ sources []
             </div>
             
             <div class="content"><div class='highlight'><pre>  app.post (
-    <span class="hljs-string">'/nodes/:id'</span>,
-    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res)</span> {</span>
-      <span class="hljs-keyword">if</span>(!api.get(req.params.id)){
-        <span class="hljs-keyword">return</span> res.send(<span class="hljs-number">404</span>);
+    <span class="string">'/nodes/:id'</span>,
+    <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> {</span>
+      <span class="keyword">if</span>(!api.get(req.params.id)){
+        <span class="keyword">return</span> res.send(<span class="number">404</span>);
       }
 
-      <span class="hljs-keyword">var</span> attrs = req.body;
+      <span class="keyword">var</span> attrs = req.body;
       
       api.set(
         req.params.id, 
         attrs, 
-        <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
-          res.send(<span class="hljs-number">204</span>);
+        <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+          res.send(<span class="number">204</span>);
       });      
 
     });</pre></div></div>
@@ -217,19 +217,19 @@ sources []
             </div>
             
             <div class="content"><div class='highlight'><pre>  app.post (
-    <span class="hljs-string">'/nodes/:id/message'</span>,
-    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res)</span> {</span>
+    <span class="string">'/nodes/:id/message'</span>,
+    <span class="function"><span class="keyword">function</span><span class="params">(req, res)</span> {</span>
 
-      <span class="hljs-keyword">if</span>(!api.get(req.params.id)){
-        <span class="hljs-keyword">return</span> res.send(<span class="hljs-number">404</span>);
+      <span class="keyword">if</span>(!api.get(req.params.id)){
+        <span class="keyword">return</span> res.send(<span class="number">404</span>);
       }
 
-      <span class="hljs-keyword">var</span> message = req.body;
+      <span class="keyword">var</span> message = req.body;
       api.inject(
         req.params.id, 
         message,
-        <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
-          res.send(<span class="hljs-number">204</span>);
+        <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+          res.send(<span class="number">204</span>);
         });
     }); 
 

@@ -30,18 +30,18 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/*
+            <div class="content"><div class='highlight'><pre><span class="comment">/*
  * https://github.com/simonswain/lancaster
  *
  * Copyright (c) 2014 Simon Swain
  * Licensed under the MIT license.
  */</span>
-<span class="hljs-pi">
-"use strict"</span>;
 
-<span class="hljs-keyword">var</span> _ = <span class="hljs-built_in">require</span>(<span class="hljs-string">'underscore'</span>);
-<span class="hljs-keyword">var</span> async = <span class="hljs-built_in">require</span>(<span class="hljs-string">'async'</span>);
-<span class="hljs-keyword">var</span> Redis = <span class="hljs-built_in">require</span>(<span class="hljs-string">'redis'</span>);</pre></div></div>
+<span class="string">"use strict"</span>;
+
+<span class="keyword">var</span> _ = require(<span class="string">'underscore'</span>);
+<span class="keyword">var</span> async = require(<span class="string">'async'</span>);
+<span class="keyword">var</span> Redis = require(<span class="string">'redis'</span>);</pre></div></div>
             
         </li>
         
@@ -70,7 +70,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>
-<span class="hljs-keyword">var</span> Topology = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(config, done)</span> {</span></pre></div></div>
+<span class="keyword">var</span> Topology = <span class="function"><span class="keyword">function</span><span class="params">(config, done)</span> {</span></pre></div></div>
             
         </li>
         
@@ -88,14 +88,14 @@
             <div class="content"><div class='highlight'><pre>
   config = config || {};
 
-  <span class="hljs-keyword">this</span>.prefix = <span class="hljs-string">''</span>;
+  <span class="keyword">this</span>.prefix = <span class="string">''</span>;
 
-  <span class="hljs-keyword">var</span> redisConfig = {
-    host: <span class="hljs-string">'127.0.0.1'</span>,
-    port: <span class="hljs-number">6379</span>
+  <span class="keyword">var</span> redisConfig = {
+    host: <span class="string">'127.0.0.1'</span>,
+    port: <span class="number">6379</span>
   };
 
-  <span class="hljs-keyword">if</span>(config.hasOwnProperty(<span class="hljs-string">'redis'</span>)){
+  <span class="keyword">if</span>(config.hasOwnProperty(<span class="string">'redis'</span>)){
     redisConfig = config.redis;
   }</pre></div></div>
             
@@ -112,8 +112,8 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span>(config.hasOwnProperty(<span class="hljs-string">'prefix'</span>)){
-    <span class="hljs-keyword">this</span>.prefix = config.prefix;
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">if</span>(config.hasOwnProperty(<span class="string">'prefix'</span>)){
+    <span class="keyword">this</span>.prefix = config.prefix;
   }</pre></div></div>
             
         </li>
@@ -129,25 +129,25 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span>(config.hasOwnProperty(<span class="hljs-string">'fns'</span>)){
-    <span class="hljs-keyword">this</span>.fns = config.fns;
-  } <span class="hljs-keyword">else</span> {
-    <span class="hljs-keyword">this</span>.fns = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./fns'</span>);
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">if</span>(config.hasOwnProperty(<span class="string">'fns'</span>)){
+    <span class="keyword">this</span>.fns = config.fns;
+  } <span class="keyword">else</span> {
+    <span class="keyword">this</span>.fns = require(<span class="string">'./fns'</span>);
   }
 
-  <span class="hljs-keyword">if</span>(<span class="hljs-keyword">this</span>.prefix !== <span class="hljs-string">''</span>){
-    <span class="hljs-keyword">this</span>.prefix = <span class="hljs-keyword">this</span>.prefix + <span class="hljs-string">':'</span>;
+  <span class="keyword">if</span>(<span class="keyword">this</span>.prefix !== <span class="string">''</span>){
+    <span class="keyword">this</span>.prefix = <span class="keyword">this</span>.prefix + <span class="string">':'</span>;
   }
 
-  <span class="hljs-keyword">this</span>.redis = Redis.createClient(redisConfig);
+  <span class="keyword">this</span>.redis = Redis.createClient(redisConfig);
 
   process.nextTick(done);
 
 };
 
-Topology.prototype.quit = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(done)</span>{</span>
-  <span class="hljs-keyword">this</span>.redis.quit();
-  <span class="hljs-keyword">return</span> done();
+Topology.prototype.quit = <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
+  <span class="keyword">this</span>.redis.quit();
+  <span class="keyword">return</span> done();
 };</pre></div></div>
             
         </li>
@@ -189,11 +189,11 @@ Topology.prototype.quit = <span class="hljs-function"><span class="hljs-keyword"
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Topology.prototype.reset = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(done)</span>{</span>
+            <div class="content"><div class='highlight'><pre>Topology.prototype.reset = <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
 
-  <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+  <span class="keyword">var</span> self = <span class="keyword">this</span>;
 
-  <span class="hljs-keyword">var</span> deleteKeys = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(next)</span>{</span></pre></div></div>
+  <span class="keyword">var</span> deleteKeys = <span class="function"><span class="keyword">function</span><span class="params">(next)</span>{</span></pre></div></div>
             
         </li>
         
@@ -209,9 +209,9 @@ Topology.prototype.quit = <span class="hljs-function"><span class="hljs-keyword"
             </div>
             
             <div class="content"><div class='highlight'><pre>    self.redis.keys(
-      self.prefix + <span class="hljs-string">'*'</span>,
-      <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, keys)</span>{</span>
-        _.each(keys, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(key)</span>{</span>
+      self.prefix + <span class="string">'*'</span>,
+      <span class="function"><span class="keyword">function</span><span class="params">(err, keys)</span>{</span>
+        _.each(keys, <span class="function"><span class="keyword">function</span><span class="params">(key)</span>{</span>
           self.redis.del(key);
         });
         next();
@@ -278,24 +278,24 @@ node id is maintained in that set</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Topology.prototype.setAttrs = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, attrs, done)</span>{</span>
-  <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
-  <span class="hljs-keyword">this</span>.redis.hmset(
-    self.prefix + <span class="hljs-string">'attrs:'</span> + id,
+            <div class="content"><div class='highlight'><pre>Topology.prototype.setAttrs = <span class="function"><span class="keyword">function</span><span class="params">(id, attrs, done)</span>{</span>
+  <span class="keyword">var</span> self = <span class="keyword">this</span>;
+  <span class="keyword">this</span>.redis.hmset(
+    self.prefix + <span class="string">'attrs:'</span> + id,
     attrs,
     done
   );
 };
 
-Topology.prototype.getAttrs = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, done)</span>{</span>
-  <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
-  <span class="hljs-keyword">this</span>.redis.hgetall(
-    self.prefix + <span class="hljs-string">'attrs:'</span> + id,
-    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, res)</span>{</span>
-      <span class="hljs-keyword">if</span>(!res){
+Topology.prototype.getAttrs = <span class="function"><span class="keyword">function</span><span class="params">(id, done)</span>{</span>
+  <span class="keyword">var</span> self = <span class="keyword">this</span>;
+  <span class="keyword">this</span>.redis.hgetall(
+    self.prefix + <span class="string">'attrs:'</span> + id,
+    <span class="function"><span class="keyword">function</span><span class="params">(err, res)</span>{</span>
+      <span class="keyword">if</span>(!res){
         res = {};
       }
-      done(<span class="hljs-literal">false</span>, res);
+      done(<span class="literal">false</span>, res);
     });
 };</pre></div></div>
             
@@ -313,12 +313,12 @@ Topology.prototype.getAttrs = <span class="hljs-function"><span class="hljs-keyw
             </div>
             
             <div class="content"><div class='highlight'><pre>
-Topology.prototype.attrs = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, attrs, done)</span>{</span>
-  <span class="hljs-keyword">if</span>(<span class="hljs-built_in">arguments</span>.length === <span class="hljs-number">2</span>){
+Topology.prototype.attrs = <span class="function"><span class="keyword">function</span><span class="params">(id, attrs, done)</span>{</span>
+  <span class="keyword">if</span>(arguments.length === <span class="number">2</span>){
     done = attrs;
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.getAttrs(id, done);
+    <span class="keyword">return</span> <span class="keyword">this</span>.getAttrs(id, done);
   }
-  <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.setAttrs(id, attrs, done);
+  <span class="keyword">return</span> <span class="keyword">this</span>.setAttrs(id, attrs, done);
 };</pre></div></div>
             
         </li>
@@ -334,10 +334,10 @@ Topology.prototype.attrs = <span class="hljs-function"><span class="hljs-keyword
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Topology.prototype.delAttrs = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, done)</span>{</span>
-  <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
-  <span class="hljs-keyword">this</span>.redis.del(
-    self.prefix + <span class="hljs-string">'attrs:'</span> + id,
+            <div class="content"><div class='highlight'><pre>Topology.prototype.delAttrs = <span class="function"><span class="keyword">function</span><span class="params">(id, done)</span>{</span>
+  <span class="keyword">var</span> self = <span class="keyword">this</span>;
+  <span class="keyword">this</span>.redis.del(
+    self.prefix + <span class="string">'attrs:'</span> + id,
     done
   );
 };</pre></div></div>
@@ -355,21 +355,21 @@ Topology.prototype.attrs = <span class="hljs-function"><span class="hljs-keyword
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Topology.prototype.addSource = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, source_id, done)</span>{</span>
+            <div class="content"><div class='highlight'><pre>Topology.prototype.addSource = <span class="function"><span class="keyword">function</span><span class="params">(id, source_id, done)</span>{</span>
   
-  <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+  <span class="keyword">var</span> self = <span class="keyword">this</span>;
 
   async.parallel([
-    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(next)</span>{</span>
+    <span class="function"><span class="keyword">function</span><span class="params">(next)</span>{</span>
       self.redis.sadd(
-        self.prefix + <span class="hljs-string">'sources:'</span> + id,
+        self.prefix + <span class="string">'sources:'</span> + id,
         source_id,
         next
       );
     },
-    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(next)</span>{</span>
+    <span class="function"><span class="keyword">function</span><span class="params">(next)</span>{</span>
       self.redis.sadd(
-        self.prefix + <span class="hljs-string">'targets:'</span> + source_id,
+        self.prefix + <span class="string">'targets:'</span> + source_id,
         id,
         next
       );
@@ -389,16 +389,16 @@ Topology.prototype.attrs = <span class="hljs-function"><span class="hljs-keyword
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Topology.prototype.delSource = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, source_id, done)</span>{</span>
-  <span class="hljs-keyword">this</span>.redis.srem(
-    <span class="hljs-keyword">this</span>.prefix + <span class="hljs-string">'sources:'</span> + id,
+            <div class="content"><div class='highlight'><pre>Topology.prototype.delSource = <span class="function"><span class="keyword">function</span><span class="params">(id, source_id, done)</span>{</span>
+  <span class="keyword">this</span>.redis.srem(
+    <span class="keyword">this</span>.prefix + <span class="string">'sources:'</span> + id,
     source_id
   );
-  <span class="hljs-keyword">this</span>.redis.srem(
-    <span class="hljs-keyword">this</span>.prefix + <span class="hljs-string">'targets:'</span> + source_id,
+  <span class="keyword">this</span>.redis.srem(
+    <span class="keyword">this</span>.prefix + <span class="string">'targets:'</span> + source_id,
     id
   );
-  <span class="hljs-keyword">return</span> done();
+  <span class="keyword">return</span> done();
 };</pre></div></div>
             
         </li>
@@ -414,14 +414,14 @@ Topology.prototype.attrs = <span class="hljs-function"><span class="hljs-keyword
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Topology.prototype.getSources = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, done)</span>{</span>
-  <span class="hljs-keyword">this</span>.redis.smembers(
-    <span class="hljs-keyword">this</span>.prefix + <span class="hljs-string">'sources:'</span> + id,
-    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, sources)</span>{</span>
-      <span class="hljs-keyword">if</span>(!sources){
+            <div class="content"><div class='highlight'><pre>Topology.prototype.getSources = <span class="function"><span class="keyword">function</span><span class="params">(id, done)</span>{</span>
+  <span class="keyword">this</span>.redis.smembers(
+    <span class="keyword">this</span>.prefix + <span class="string">'sources:'</span> + id,
+    <span class="function"><span class="keyword">function</span><span class="params">(err, sources)</span>{</span>
+      <span class="keyword">if</span>(!sources){
         sources = [];
       }
-      <span class="hljs-keyword">return</span> done(<span class="hljs-literal">false</span>, sources);
+      <span class="keyword">return</span> done(<span class="literal">false</span>, sources);
     });  
 };</pre></div></div>
             
@@ -438,17 +438,17 @@ Topology.prototype.attrs = <span class="hljs-function"><span class="hljs-keyword
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Topology.prototype.delSources = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, done)</span>{</span> 
-  <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
-  <span class="hljs-keyword">this</span>.getSources(
+            <div class="content"><div class='highlight'><pre>Topology.prototype.delSources = <span class="function"><span class="keyword">function</span><span class="params">(id, done)</span>{</span> 
+  <span class="keyword">var</span> self = <span class="keyword">this</span>;
+  <span class="keyword">this</span>.getSources(
     id, 
-    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, sources)</span>{</span>
-      <span class="hljs-keyword">if</span>(!sources){
-        <span class="hljs-keyword">return</span> done();
+    <span class="function"><span class="keyword">function</span><span class="params">(err, sources)</span>{</span>
+      <span class="keyword">if</span>(!sources){
+        <span class="keyword">return</span> done();
       }
       async.eachSeries(
         sources, 
-        <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(source_id, next)</span>{</span>
+        <span class="function"><span class="keyword">function</span><span class="params">(source_id, next)</span>{</span>
           self.delSource(id, source_id, next);
         },
         done
@@ -457,15 +457,15 @@ Topology.prototype.attrs = <span class="hljs-function"><span class="hljs-keyword
 };
 
 
-Topology.prototype.getTargets = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, done)</span>{</span>
-  <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
-  <span class="hljs-keyword">this</span>.redis.smembers(
-    self.prefix + <span class="hljs-string">'targets:'</span> + id,
-    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, targets)</span>{</span>
-      <span class="hljs-keyword">if</span>(!targets){
+Topology.prototype.getTargets = <span class="function"><span class="keyword">function</span><span class="params">(id, done)</span>{</span>
+  <span class="keyword">var</span> self = <span class="keyword">this</span>;
+  <span class="keyword">this</span>.redis.smembers(
+    self.prefix + <span class="string">'targets:'</span> + id,
+    <span class="function"><span class="keyword">function</span><span class="params">(err, targets)</span>{</span>
+      <span class="keyword">if</span>(!targets){
         targets = [];
       }
-      <span class="hljs-keyword">return</span> done(<span class="hljs-literal">false</span>, targets);
+      <span class="keyword">return</span> done(<span class="literal">false</span>, targets);
     });  
 };</pre></div></div>
             
@@ -482,25 +482,25 @@ Topology.prototype.getTargets = <span class="hljs-function"><span class="hljs-ke
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Topology.prototype.setData = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, data, done)</span>{</span>
-  <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
-  <span class="hljs-keyword">this</span>.redis.set(
-    self.prefix + <span class="hljs-string">'data:'</span> + id,
-    <span class="hljs-built_in">JSON</span>.stringify(data),
+            <div class="content"><div class='highlight'><pre>Topology.prototype.setData = <span class="function"><span class="keyword">function</span><span class="params">(id, data, done)</span>{</span>
+  <span class="keyword">var</span> self = <span class="keyword">this</span>;
+  <span class="keyword">this</span>.redis.set(
+    self.prefix + <span class="string">'data:'</span> + id,
+    JSON.stringify(data),
     done
   );
 };
 
-Topology.prototype.getData = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, done)</span>{</span>
-  <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
-  <span class="hljs-keyword">this</span>.redis.get(
-    self.prefix + <span class="hljs-string">'data:'</span> + id,
-    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, res)</span>{</span>
-      <span class="hljs-keyword">var</span> data = <span class="hljs-literal">null</span>;
-      <span class="hljs-keyword">if</span>(res){
-        data = <span class="hljs-built_in">JSON</span>.parse(res);
+Topology.prototype.getData = <span class="function"><span class="keyword">function</span><span class="params">(id, done)</span>{</span>
+  <span class="keyword">var</span> self = <span class="keyword">this</span>;
+  <span class="keyword">this</span>.redis.get(
+    self.prefix + <span class="string">'data:'</span> + id,
+    <span class="function"><span class="keyword">function</span><span class="params">(err, res)</span>{</span>
+      <span class="keyword">var</span> data = <span class="literal">null</span>;
+      <span class="keyword">if</span>(res){
+        data = JSON.parse(res);
       }
-      done(<span class="hljs-literal">false</span>, data);
+      done(<span class="literal">false</span>, data);
     });
 };</pre></div></div>
             
@@ -518,15 +518,15 @@ set</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Topology.prototype.setSources = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, sources, done)</span>{</span>
-  <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
-  <span class="hljs-keyword">this</span>.delSources(id, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span> 
-    <span class="hljs-keyword">if</span>(!sources){
-      <span class="hljs-keyword">return</span> done();
+            <div class="content"><div class='highlight'><pre>Topology.prototype.setSources = <span class="function"><span class="keyword">function</span><span class="params">(id, sources, done)</span>{</span>
+  <span class="keyword">var</span> self = <span class="keyword">this</span>;
+  <span class="keyword">this</span>.delSources(id, <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span> 
+    <span class="keyword">if</span>(!sources){
+      <span class="keyword">return</span> done();
     }
     async.eachSeries(
       sources, 
-      <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(source_id, next)</span>{</span>
+      <span class="function"><span class="keyword">function</span><span class="params">(source_id, next)</span>{</span>
         self.addSource(id, source_id, next);
       },
       done
@@ -549,54 +549,54 @@ Get a single node. Callback provides null if doesn’t exist</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>
-Topology.prototype.get = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, done)</span>{</span>
+Topology.prototype.get = <span class="function"><span class="keyword">function</span><span class="params">(id, done)</span>{</span>
 
-  <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+  <span class="keyword">var</span> self = <span class="keyword">this</span>;
 
-  <span class="hljs-keyword">var</span> node = {};
+  <span class="keyword">var</span> node = {};
 
-  <span class="hljs-keyword">this</span>.redis.get(
-    self.prefix + <span class="hljs-string">'nodes:'</span> + id,
-    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, res)</span>{</span>
+  <span class="keyword">this</span>.redis.get(
+    self.prefix + <span class="string">'nodes:'</span> + id,
+    <span class="function"><span class="keyword">function</span><span class="params">(err, res)</span>{</span>
 
-      <span class="hljs-keyword">if</span>(err){
-        console.log(<span class="hljs-string">'ERROR'</span>, err);
-        <span class="hljs-keyword">return</span> done(err);
+      <span class="keyword">if</span>(err){
+        console.log(<span class="string">'ERROR'</span>, err);
+        <span class="keyword">return</span> done(err);
       }
 
-      <span class="hljs-keyword">if</span>(!res){
-        <span class="hljs-keyword">return</span> done(<span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>);
+      <span class="keyword">if</span>(!res){
+        <span class="keyword">return</span> done(<span class="literal">null</span>, <span class="literal">null</span>);
       }
 
-      res = <span class="hljs-built_in">JSON</span>.parse(res);
+      res = JSON.parse(res);
       node.id = res.id;
       node.fn = res.fn;
 
       async.parallel([
-        <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(next)</span>{</span>
-          self.getSources(id, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, sources)</span>{</span>
+        <span class="function"><span class="keyword">function</span><span class="params">(next)</span>{</span>
+          self.getSources(id, <span class="function"><span class="keyword">function</span><span class="params">(err, sources)</span>{</span>
             node.sources = sources;
             next();
           });
         },
-        <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(next)</span>{</span>
-          self.getAttrs(id, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, res)</span>{</span>
+        <span class="function"><span class="keyword">function</span><span class="params">(next)</span>{</span>
+          self.getAttrs(id, <span class="function"><span class="keyword">function</span><span class="params">(err, res)</span>{</span>
             node.attrs = res;
             next();
           });
         },
-        <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(next)</span>{</span>
-          self.getData(id, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, data)</span>{</span>
+        <span class="function"><span class="keyword">function</span><span class="params">(next)</span>{</span>
+          self.getData(id, <span class="function"><span class="keyword">function</span><span class="params">(err, data)</span>{</span>
             node.data = data;
             next();
           });
         }
-      ], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err)</span>{</span>
-        <span class="hljs-keyword">if</span>(err){
+      ], <span class="function"><span class="keyword">function</span><span class="params">(err)</span>{</span>
+        <span class="keyword">if</span>(err){
           console.log(err);
-          <span class="hljs-keyword">return</span> done(err, <span class="hljs-literal">null</span>);
+          <span class="keyword">return</span> done(err, <span class="literal">null</span>);
         }
-        done(<span class="hljs-literal">false</span>, node);
+        done(<span class="literal">false</span>, node);
       });
     });
 
@@ -615,38 +615,38 @@ Topology.prototype.get = <span class="hljs-function"><span class="hljs-keyword">
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Topology.prototype.all = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(done)</span>{</span>
+            <div class="content"><div class='highlight'><pre>Topology.prototype.all = <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
 
-  <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+  <span class="keyword">var</span> self = <span class="keyword">this</span>;
 
-  <span class="hljs-keyword">var</span> keys = [];
-  <span class="hljs-keyword">var</span> nodes = {};
+  <span class="keyword">var</span> keys = [];
+  <span class="keyword">var</span> nodes = {};
 
   async.series([
-    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(next)</span>{</span>
+    <span class="function"><span class="keyword">function</span><span class="params">(next)</span>{</span>
       self.redis.keys(
-        self.prefix + <span class="hljs-string">'nodes:*'</span>,
-        <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, res)</span>{</span>
-          <span class="hljs-keyword">if</span>(res){
+        self.prefix + <span class="string">'nodes:*'</span>,
+        <span class="function"><span class="keyword">function</span><span class="params">(err, res)</span>{</span>
+          <span class="keyword">if</span>(res){
             keys = res;
           }
           next();
         });
     },
-    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(next)</span>{</span>
+    <span class="function"><span class="keyword">function</span><span class="params">(next)</span>{</span>
       async.eachSeries(
         keys,
-        <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(key, next)</span>{</span>
-          <span class="hljs-keyword">var</span> id = _.last(key.split(<span class="hljs-string">':'</span>)); 
-          self.get(id, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, node)</span>{</span>
+        <span class="function"><span class="keyword">function</span><span class="params">(key, next)</span>{</span>
+          <span class="keyword">var</span> id = _.last(key.split(<span class="string">':'</span>)); 
+          self.get(id, <span class="function"><span class="keyword">function</span><span class="params">(err, node)</span>{</span>
             nodes[node.id] = node;
             next();
           });
-        }, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+        }, <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
           next();
         });
-    }], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
-      done(<span class="hljs-literal">false</span>, nodes);
+    }], <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+      done(<span class="literal">false</span>, nodes);
     });
 };</pre></div></div>
             
@@ -663,13 +663,13 @@ Topology.prototype.get = <span class="hljs-function"><span class="hljs-keyword">
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Topology.prototype.add = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(node, done)</span>{</span>
+            <div class="content"><div class='highlight'><pre>Topology.prototype.add = <span class="function"><span class="keyword">function</span><span class="params">(node, done)</span>{</span>
 
-  <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+  <span class="keyword">var</span> self = <span class="keyword">this</span>;
 
-  <span class="hljs-keyword">this</span>.get(
+  <span class="keyword">this</span>.get(
     node.id, 
-    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, n)</span>{</span></pre></div></div>
+    <span class="function"><span class="keyword">function</span><span class="params">(err, n)</span>{</span></pre></div></div>
             
         </li>
         
@@ -685,35 +685,21 @@ Topology.prototype.get = <span class="hljs-function"><span class="hljs-keyword">
             </div>
             
             <div class="content"><div class='highlight'><pre>
-      <span class="hljs-keyword">if</span>(n){
-        <span class="hljs-keyword">return</span> done(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'duplicate-id'</span>));
+      <span class="keyword">if</span>(n){
+        <span class="keyword">return</span> done(<span class="keyword">new</span> Error(<span class="string">'duplicate-id'</span>));
       }        
       
-      <span class="hljs-keyword">if</span>(!node.hasOwnProperty(<span class="hljs-string">'sources'</span>)){
+      <span class="keyword">if</span>(!node.hasOwnProperty(<span class="string">'sources'</span>)){
         node.sources = [];
       }
 
-      <span class="hljs-keyword">if</span>(!node.hasOwnProperty(<span class="hljs-string">'attrs'</span>)){
+      <span class="keyword">if</span>(!node.hasOwnProperty(<span class="string">'attrs'</span>)){
         node.attrs = {};
       }
 
-      <span class="hljs-keyword">if</span>(!node.hasOwnProperty(<span class="hljs-string">'fn'</span>)){
-        node.fn = <span class="hljs-string">'thru'</span>;
-      }
-      
-      <span class="hljs-keyword">var</span> fn = self.fns[node.fn];
-
-      <span class="hljs-keyword">if</span>(fn.hasOwnProperty(<span class="hljs-string">'attrs'</span>)){
-        _.each(fn.attrs, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(v, k)</span>{</span>
-          <span class="hljs-keyword">if</span>(!node.attrs.hasOwnProperty(k)){
-            node.attrs[k] = v;
-          }
-        });
-      }
-
-      async.series([
-
-        <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(next)</span>{</span></pre></div></div>
+      <span class="keyword">if</span>(!node.hasOwnProperty(<span class="string">'fn'</span>)){
+        node.fn = <span class="string">'thru'</span>;
+      }</pre></div></div>
             
         </li>
         
@@ -724,20 +710,24 @@ Topology.prototype.get = <span class="hljs-function"><span class="hljs-keyword">
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
-              <p>save node. id and fn are immutable</p>
+              <p>copy default attrs from fn definition</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">var</span> key = self.prefix + <span class="hljs-string">'nodes:'</span> + node.id;
-          <span class="hljs-keyword">var</span> val = {
-            id: node.id,
-            fn: node.fn
-          };
-          self.redis.set(key, <span class="hljs-built_in">JSON</span>.stringify(val));
-          next();
-        },
+            <div class="content"><div class='highlight'><pre>
+      <span class="keyword">var</span> fn = self.fns[node.fn];
 
-        <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(next)</span>{</span></pre></div></div>
+      <span class="keyword">if</span>(fn.hasOwnProperty(<span class="string">'attrs'</span>)){
+        _.each(fn.attrs, <span class="function"><span class="keyword">function</span><span class="params">(v, k)</span>{</span>
+          <span class="keyword">if</span>(!node.attrs.hasOwnProperty(k)){
+            node.attrs[k] = v;
+          }
+        });
+      }
+
+      async.series([
+
+        <span class="function"><span class="keyword">function</span><span class="params">(next)</span>{</span></pre></div></div>
             
         </li>
         
@@ -748,14 +738,20 @@ Topology.prototype.get = <span class="hljs-function"><span class="hljs-keyword">
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
-              <p>set the inital sources on the node</p>
+              <p>save node. id and fn are immutable</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          self.setSources(node.id, node.sources, next);
+            <div class="content"><div class='highlight'><pre>          <span class="keyword">var</span> key = self.prefix + <span class="string">'nodes:'</span> + node.id;
+          <span class="keyword">var</span> val = {
+            id: node.id,
+            fn: node.fn
+          };
+          self.redis.set(key, JSON.stringify(val));
+          next();
         },
 
-        <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(next)</span>{</span></pre></div></div>
+        <span class="function"><span class="keyword">function</span><span class="params">(next)</span>{</span></pre></div></div>
             
         </li>
         
@@ -766,13 +762,14 @@ Topology.prototype.get = <span class="hljs-function"><span class="hljs-keyword">
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
-              <p>init node</p>
+              <p>set the inital sources on the node</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span>(!fn.hasOwnProperty(<span class="hljs-string">'init'</span>)){
-            <span class="hljs-keyword">return</span> next();
-          }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>          self.setSources(node.id, node.sources, next);
+        },
+
+        <span class="function"><span class="keyword">function</span><span class="params">(next)</span>{</span></pre></div></div>
             
         </li>
         
@@ -783,15 +780,13 @@ Topology.prototype.get = <span class="hljs-function"><span class="hljs-keyword">
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
-              <p>allow init to run. It may set some attrs</p>
+              <p>init node</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          fn.attrs = node.attrs;
-          fn.init(next);
-        },
-
-        <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(next)</span>{</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>          <span class="keyword">if</span>(!fn.hasOwnProperty(<span class="string">'init'</span>)){
+            <span class="keyword">return</span> next();
+          }</pre></div></div>
             
         </li>
         
@@ -802,19 +797,15 @@ Topology.prototype.get = <span class="hljs-function"><span class="hljs-keyword">
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
-              <p>set the initial attrs on the node</p>
+              <p>allow init to run. It may set some attrs</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          self.setAttrs(node.id, node.attrs, next);
-        }
+            <div class="content"><div class='highlight'><pre>          fn.attrs = node.attrs;
+          fn.init(next);
+        },
 
-      ], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
-        done();
-      });
-    });  
-
-};</pre></div></div>
+        <span class="function"><span class="keyword">function</span><span class="params">(next)</span>{</span></pre></div></div>
             
         </li>
         
@@ -825,25 +816,19 @@ Topology.prototype.get = <span class="hljs-function"><span class="hljs-keyword">
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
-              <p>remove a node from the topology</p>
+              <p>set the initial attrs on the node</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Topology.prototype.del = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, done)</span>{</span>
+            <div class="content"><div class='highlight'><pre>          self.setAttrs(node.id, node.attrs, next);
+        }
 
-  <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+      ], <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+        done();
+      });
+    });  
 
-  <span class="hljs-keyword">this</span>.get(
-    id, 
-    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, n)</span>{</span>
-
-      <span class="hljs-keyword">if</span>(!n){
-        <span class="hljs-keyword">return</span> done();
-      }
-
-      async.series([
-
-        <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(next)</span>{</span></pre></div></div>
+};</pre></div></div>
             
         </li>
         
@@ -854,20 +839,49 @@ Topology.prototype.get = <span class="hljs-function"><span class="hljs-keyword">
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
+              <p>remove a node from the topology</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Topology.prototype.del = <span class="function"><span class="keyword">function</span><span class="params">(id, done)</span>{</span>
+
+  <span class="keyword">var</span> self = <span class="keyword">this</span>;
+
+  <span class="keyword">this</span>.get(
+    id, 
+    <span class="function"><span class="keyword">function</span><span class="params">(err, n)</span>{</span>
+
+      <span class="keyword">if</span>(!n){
+        <span class="keyword">return</span> done();
+      }
+
+      async.series([
+
+        <span class="function"><span class="keyword">function</span><span class="params">(next)</span>{</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
               <p>id and fn are immutable</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">var</span> key = self.prefix + <span class="hljs-string">'nodes:'</span> + id;
+            <div class="content"><div class='highlight'><pre>          <span class="keyword">var</span> key = self.prefix + <span class="string">'nodes:'</span> + id;
           self.redis.del(key);
           next();
         },
 
-        <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(next)</span>{</span>
+        <span class="function"><span class="keyword">function</span><span class="params">(next)</span>{</span>
           self.delSources(id, next);
         },
 
-        <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(next)</span>{</span>
+        <span class="function"><span class="keyword">function</span><span class="params">(next)</span>{</span>
           self.delAttrs(id, next);
         }
 
@@ -879,47 +893,15 @@ Topology.prototype.get = <span class="hljs-function"><span class="hljs-keyword">
         </li>
         
         
-        <li id="section-34">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
-              </div>
-              <p>inject a message in to a node</p>
-
-            </div>
-            
-        </li>
-        
-        
         <li id="section-35">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
-              <p>message handler does process then emits event (redis pub) and
-distributes message to targets (redis queue)</p>
+              <p>inject a message in to a node</p>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>Topology.prototype.inject = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, data, done)</span>{</span>
-
-  <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
-  
-  <span class="hljs-keyword">var</span> message = {
-    at: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>().getTime(),
-    id: id,
-    data: data
-  };
-
-  <span class="hljs-keyword">this</span>.redis.lpush(
-    self.prefix + <span class="hljs-string">'queue'</span>,
-    <span class="hljs-built_in">JSON</span>.stringify(message),
-    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err)</span>{</span>
-      <span class="hljs-keyword">return</span> done();
-    });
-};</pre></div></div>
             
         </li>
         
@@ -930,38 +912,28 @@ distributes message to targets (redis queue)</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
-              <p>delete all messages off queue</p>
+              <p>message handler does process then emits event (redis pub) and
+distributes message to targets (redis queue)</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>Topology.prototype.purge = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(done)</span>{</span>
+            <div class="content"><div class='highlight'><pre>Topology.prototype.inject = <span class="function"><span class="keyword">function</span><span class="params">(id, data, done)</span>{</span>
 
-  <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+  <span class="keyword">var</span> self = <span class="keyword">this</span>;
+  
+  <span class="keyword">var</span> message = {
+    at: <span class="keyword">new</span> Date().getTime(),
+    id: id,
+    data: data
+  };
 
-  <span class="hljs-keyword">this</span>.redis.del(
-    self.prefix + <span class="hljs-string">'queue'</span>,
-    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err)</span>{</span>
-      <span class="hljs-keyword">if</span>(done){
-        <span class="hljs-keyword">return</span> done(<span class="hljs-literal">null</span>);
-      }
+  <span class="keyword">this</span>.redis.lpush(
+    self.prefix + <span class="string">'queue'</span>,
+    JSON.stringify(message),
+    <span class="function"><span class="keyword">function</span><span class="params">(err)</span>{</span>
+      <span class="keyword">return</span> done();
     });
-};
-
-
-Topology.prototype.extract = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(done)</span>{</span>
-
-  <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
-
-  <span class="hljs-keyword">this</span>.redis.rpop(
-    <span class="hljs-keyword">this</span>.prefix + <span class="hljs-string">'queue'</span>,
-    <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, reply)</span>{</span>
-
-      <span class="hljs-keyword">if</span>(err){
-        console.log(<span class="hljs-string">'#run error'</span>, err);
-        <span class="hljs-keyword">return</span> done(err, <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>);
-      }
-
-      <span class="hljs-keyword">if</span> (!reply){</pre></div></div>
+};</pre></div></div>
             
         </li>
         
@@ -972,17 +944,38 @@ Topology.prototype.extract = <span class="hljs-function"><span class="hljs-keywo
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-37">&#182;</a>
               </div>
-              <p>timed out, no message</p>
+              <p>delete all messages off queue</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">return</span> done(<span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>);
+            <div class="content"><div class='highlight'><pre>Topology.prototype.purge = <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
+
+  <span class="keyword">var</span> self = <span class="keyword">this</span>;
+
+  <span class="keyword">this</span>.redis.del(
+    self.prefix + <span class="string">'queue'</span>,
+    <span class="function"><span class="keyword">function</span><span class="params">(err)</span>{</span>
+      <span class="keyword">if</span>(done){
+        <span class="keyword">return</span> done(<span class="literal">null</span>);
+      }
+    });
+};
+
+
+Topology.prototype.extract = <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
+
+  <span class="keyword">var</span> self = <span class="keyword">this</span>;
+
+  <span class="keyword">this</span>.redis.rpop(
+    <span class="keyword">this</span>.prefix + <span class="string">'queue'</span>,
+    <span class="function"><span class="keyword">function</span><span class="params">(err, reply)</span>{</span>
+
+      <span class="keyword">if</span>(err){
+        console.log(<span class="string">'#run error'</span>, err);
+        <span class="keyword">return</span> done(err, <span class="literal">null</span>, <span class="literal">null</span>);
       }
 
-      <span class="hljs-keyword">var</span> id, msg, input;
-
-      <span class="hljs-keyword">try</span> {
-        msg = <span class="hljs-built_in">JSON</span>.parse(reply);</pre></div></div>
+      <span class="keyword">if</span> (!reply){</pre></div></div>
             
         </li>
         
@@ -993,12 +986,17 @@ Topology.prototype.extract = <span class="hljs-function"><span class="hljs-keywo
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-38">&#182;</a>
               </div>
-              <p>if brpop use this instead
-input = JSON.parse(reply[1]);</p>
+              <p>timed out, no message</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      } <span class="hljs-keyword">catch</span> (e) {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">return</span> done(<span class="literal">null</span>, <span class="literal">null</span>, <span class="literal">null</span>);
+      }
+
+      <span class="keyword">var</span> id, msg, input;
+
+      <span class="keyword">try</span> {
+        msg = JSON.parse(reply);</pre></div></div>
             
         </li>
         
@@ -1009,15 +1007,31 @@ input = JSON.parse(reply[1]);</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-39">&#182;</a>
               </div>
+              <p>if brpop use this instead
+input = JSON.parse(reply[1]);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      } <span class="keyword">catch</span> (e) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
               <p>bad json</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        console.log(<span class="hljs-string">'bad json'</span>, e, reply);
-        <span class="hljs-keyword">return</span> done(err, <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>);
+            <div class="content"><div class='highlight'><pre>        console.log(<span class="string">'bad json'</span>, e, reply);
+        <span class="keyword">return</span> done(err, <span class="literal">null</span>, <span class="literal">null</span>);
       }
 
-      <span class="hljs-keyword">return</span> done(<span class="hljs-literal">null</span>, msg.id, msg.data);
+      <span class="keyword">return</span> done(<span class="literal">null</span>, msg.id, msg.data);
 
     });
 };

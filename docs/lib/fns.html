@@ -30,31 +30,74 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-pi">"use strict"</span>;
+            <div class="content"><div class='highlight'><pre><span class="string">"use strict"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>some simple default fns. App using the library will replace these
+with it’s own when instantiating the Topology.</p>
 
-<span class="hljs-keyword">var</span> fns = module.exports = {};
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="keyword">var</span> fns = module.exports = {};
 
 fns.thru = {
 
-  process: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(attrs, message, done)</span>{</span>
-    done(<span class="hljs-literal">null</span>, attrs, message);
+  process: <span class="function"><span class="keyword">function</span><span class="params">(attrs, message, done)</span>{</span>
+    done(<span class="literal">null</span>, attrs, message);
   }
 
 };
 
-fns.count = {
+fns.count = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>default atts for the fn</p>
 
-  attrs: {
-    total: <span class="hljs-number">0</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  attrs: {
+    total: <span class="number">0</span>
   },
 
-  init: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(done)</span>{</span>
+  init: <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
     done();
-  },
+  },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>attrs are passed in by reference, and changed as require by fn to
+update state</p>
 
-  process: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(attrs, message, done)</span>{</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+  process: <span class="function"><span class="keyword">function</span><span class="params">(attrs, message, done)</span>{</span>
     attrs.total ++;
-    done(<span class="hljs-literal">null</span>, attrs, {total:attrs.total});
+    done(<span class="literal">null</span>, attrs, {total:attrs.total});
   }
 
 };</pre></div></div>
