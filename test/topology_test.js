@@ -5,7 +5,7 @@ var config = require('./config.js');
 
 var async = require('async');
 
-var topo, myNode;
+var topo, myNode, myData, myId;
 
 exports['topology'] = {
 
@@ -315,7 +315,6 @@ exports['topology'] = {
       myId,
       myData,
       function(err){
-        console.log(err);
         test.equals(err, null);
         test.done();
       }
