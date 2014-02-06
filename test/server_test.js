@@ -1,108 +1,76 @@
 // "use strict";
 
-// var config = require('./config.js');
+var config = require('./config.js');
 
-// var http = require('nodeunit-httpclient').create({
-//   port: config.port,
-//   path: '/',
-//   status: 200
-// });
+var Lancaster = require('../index.js');
 
-// var Lancaster = require('../index.js');
+var http = require('nodeunit-httpclient')
+  .create({
+    port: config.port,
+    path: '/',
+    status: 200
+  });
 
-// exports['rest'] = {
+var server;
 
-//   'server-start-stop': function(test) {
+exports['server'] = {
 
-//     var server = new Lancaster(config);
+  'new-server': function(test) {
 
-//     server.on('stop', function(){
-//       test.done();
-//     });
+    server = new Lancaster.Server(config, function(){
+      test.done();
+    });
+  },
 
-//     server.on('start', function(){
-//       server.reset(function(){
-//         server.stop();
-//       });
-//     });
+  'start': function(test) {
+    server.start(function(){
+      test.done();
+    });
+  },
+
+  'ping': function(test) {
+
+    test.expect(2);
     
-//     server.start();
+    http.get( 
+      test, 
+      'ping',
+      function(res) {
+        test.ok(res.data.hasOwnProperty('pong'), 'Got Pong');
+        test.done();
+      });
 
-//   },
+  },
 
-//   'ping': function(test) {
+  'inspect': function(test) {
 
-//     test.expect(2);
+    test.expect(2);
 
-//     var server = new Lancaster(config);
+    http.get( test, 'nodes', function(res) {
+      test.equal(typeof res.data, 'object');
+      server.stop();
+    });
+   
 
-//     server.on('stop', function(){
-//       test.done();
-//     });
+  },
 
-//     server.on('start', function(){
-//       server.reset(function(){
-//         http.get( test, 'ping', function(res) {
-//           test.ok(res.data.hasOwnProperty('pong'), 'Got Pong');
-//           server.stop();
-//         });
-//       });
-//     });
+  'get-non-existant-node': function(test) {
+    test.expect(1);
+
+        http.get( 
+          test, 
+          'nodes/bogus', 
+          {}, 
+          {
+            status: 404
+          }, 
+          function(res) {
+            server.stop();
+          });
+      });
+    });
     
-//     server.start();
-
-//   },
-
-//   'inspect': function(test) {
-
-//     test.expect(2);
-
-//     var server = new Lancaster(config);
-
-//     server.on('stop', function(){
-//       test.done();
-//     });
-
-//     server.on('start', function(){
-//       server.reset(function(){
-//         http.get( test, 'nodes', function(res) {
-//           test.equal(typeof res.data, 'object');
-//           server.stop();
-//         });
-//       });
-//     });
-    
-//     server.start();
-
-//   },
-
-//   'get-non-existant-node': function(test) {
-//     test.expect(1);
-
-//     var server = new Lancaster(config);
-
-//     server.on('stop', function(){
-//       test.done();
-//     });
-
-//     server.on('start', function(){
-//       server.reset(function(){
-//         http.get( 
-//           test, 
-//           'nodes/bogus', 
-//           {}, 
-//           {
-//             status: 404
-//           }, 
-//           function(res) {
-//             server.stop();
-//           });
-//       });
-//     });
-    
-//     server.start();
-
-//   },
+  },
 
 //   'create-node': function(test) {
 //     test.expect(4);
@@ -234,4 +202,11 @@
 
 //   },
 
-// };
+  'stop': function(test) {
+    server.stop(function(){
+      test.done();
+    });
+  }
+
+
+};

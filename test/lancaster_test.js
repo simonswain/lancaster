@@ -9,12 +9,12 @@ var topo;
 
 exports['lancaster'] = {
   'exports': function(test) {
-    test.expect(4);
+    test.expect(5);
     test.equal(typeof Lancaster, 'object');
     test.equal(typeof Lancaster.Topology, 'function');
     test.equal(typeof Lancaster.Worker, 'function');
     test.equal(typeof Lancaster.Client, 'function');
-    //test.equal(typeof Lancaster.Server, 'function');
+    test.equal(typeof Lancaster.Server, 'function');
     test.done();
   }
 
