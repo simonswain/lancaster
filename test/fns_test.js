@@ -1,8 +1,9 @@
 "use strict";
 
-// var config = require('../config.js');
 // var async = require('async');
-// var Lancaster = require('../lib/lancaster.js');
+
+// var Lancaster = require('../index.js');
+// var config = require('../config.js');
 
 // exports['nodes'] = {
 

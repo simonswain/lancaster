@@ -30,14 +30,14 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="string">"use strict"</span>;
+            <div class="content"><div class='highlight'><pre><span class="hljs-pi">"use strict"</span>;
 
-<span class="keyword">var</span> fns = module.exports = {};
+<span class="hljs-keyword">var</span> fns = module.exports = {};
 
 fns.thru = {
 
-  process: <span class="function"><span class="keyword">function</span><span class="params">(attrs, message, done)</span>{</span>
-    done(<span class="literal">null</span>, attrs, message);
+  process: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(attrs, message, done)</span>{</span>
+    done(<span class="hljs-literal">null</span>, attrs, message);
   }
 
 };
@@ -45,16 +45,16 @@ fns.thru = {
 fns.count = {
 
   attrs: {
-    total: <span class="number">0</span>
+    total: <span class="hljs-number">0</span>
   },
 
-  init: <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
+  init: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(done)</span>{</span>
     done();
   },
 
-  process: <span class="function"><span class="keyword">function</span><span class="params">(attrs, message, done)</span>{</span>
+  process: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(attrs, message, done)</span>{</span>
     attrs.total ++;
-    done(<span class="literal">null</span>, attrs, {total:attrs.total});
+    done(<span class="hljs-literal">null</span>, attrs, {total:attrs.total});
   }
 
 };</pre></div></div>

@@ -1,6 +1,6 @@
 // "use strict";
 
-// var config = require('../config.js');
+// var config = require('./config.js');
 
 // var http = require('nodeunit-httpclient').create({
 //   port: config.port,
@@ -8,7 +8,7 @@
 //   status: 200
 // });
 
-// var Lancaster = require('../lib/lancaster.js');
+// var Lancaster = require('../index.js');
 
 // exports['rest'] = {
 

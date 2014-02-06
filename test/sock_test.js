@@ -1,12 +1,12 @@
 // "use strict";
 
-// var config = require('../config.js');
+// var config = require('./config.js');
 
 // var async = require('async');
 // var sockjs = require('sockjs-client');
 
 
-// var Lancaster = require('../lib/lancaster.js');
+// var Lancaster = require('../index.js');
 
 // exports['sock'] = {
 
