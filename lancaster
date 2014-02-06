@@ -1,20 +1,36 @@
 #! /usr/bin/env node
-var daemon = require("daemonize2").setup({
-    main: "server.js",
-    name: "lancaster",
-    pidfile: "lancaster.pid"
+
+// runner for a simple restserver-worker combo. sufficient for testing.
+
+// ensure you have a config.js set up
+
+// cp config.sample.js config.js
+
+var server = require("daemonize2").setup({
+  main: "server.js",
+  name: "lancaster-server",
+  pidfile: "lancaster-server.pid"
 });
+
+var worker = require("daemonize2").setup({
+  main: "worker.js",
+  name: "lancaster-worker",
+  pidfile: "lancaster-worker.pid"
+});
+
 
 switch (process.argv[2]) {
 
-    case "start":
-        daemon.start();
-        break;
+case "start":
+  server.start();
+  worker.start();
+  break;
 
-    case "stop":
-        daemon.stop();
-        break;
+case "stop":
+  server.stop();
+  worker.stop();
+  break;
 
-    default:
-        console.log("Usage: [start|stop]");
+default:
+  console.log("Usage: [start|stop]");
 }
