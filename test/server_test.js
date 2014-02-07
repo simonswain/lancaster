@@ -28,179 +28,226 @@ exports['server'] = {
     });
   },
 
-  'ping': function(test) {
+  'start': function(test) {
+    server.start(function(){
+      test.done();
+    });
+  },
 
+  'reset': function(test) {
+    test.expect(1);
+    http.post(
+      test,
+      'reset',
+      function(res) {
+        test.done();
+      });
+  },
+
+  'ping': function(test) {
     test.expect(2);
-    
-    http.get( 
-      test, 
+    http.get(
+      test,
       'ping',
       function(res) {
         test.ok(res.data.hasOwnProperty('pong'), 'Got Pong');
         test.done();
       });
-
   },
 
   'inspect': function(test) {
-
     test.expect(2);
-
-    http.get( test, 'nodes', function(res) {
-      test.equal(typeof res.data, 'object');
-      server.stop();
-    });
-   
-
+    http.get(
+      test,
+      'nodes',
+      function(res) {
+        test.equal(typeof res.data, 'object');
+        test.done();
+      });
   },
 
   'get-non-existant-node': function(test) {
     test.expect(1);
 
-        http.get( 
-          test, 
-          'nodes/bogus', 
-          {}, 
-          {
-            status: 404
-          }, 
-          function(res) {
-            server.stop();
-          });
+    http.get(
+      test,
+      'nodes/bogus',
+      {},
+      {
+        status: 404
+      },
+      function(res) {
+        test.done();
       });
-    });
-    
   },
 
-//   'create-node': function(test) {
-//     test.expect(4);
+ 'create-node': function(test) {
+    test.expect(4);
 
-//     var server = new Lancaster(config);
+    http.post(
+      test,
+      'nodes', {
+        data:{
+          'id': 'test-node'
+        }
+      }, {
+        status: 200
+      }, function(res) {
 
-//     server.on('stop', function(){
-//       test.done();
-//     });
+        // inpsect to check nodes were created
+        http.get(
+          test,
+          'nodes/test-node',
+          function(res) {
+            test.equal(typeof res.data, 'object');
+            test.equals(res.data.id, 'test-node');
+            test.done();
+          });
+      });
 
-//     server.on('start', function(){
-//       server.reset(function(){
-//         http.post(
-//           test, 
-//           'nodes', {
-//             data:{
-//               'id': 'test-node'
-//             }
-//           }, {
-//             status: 204
-//           }, function(res) {
+  },
 
-//             // inpsect to check nodes were created
-//             http.get( test, 'nodes', function(res) {
-//               test.equal(typeof res.data, 'object');
-//               test.ok(res.data.hasOwnProperty('test-node'));
-//               server.stop();
-//             });
+  'create-dup-node': function(test) {
+    test.expect(1);
+    http.post(
+      test,
+      'nodes', {
+        data:{
+          'id': 'test-node'
+        }
+      }, {
+        status: 409
+      }, function(res) {
+        test.done()
+      });
 
-//           });
+  },
 
-//       });
-//     });
-    
-//     server.start();
+  'inspect-again': function(test) {
+    test.expect(3);
+    http.get(
+      test,
+      'nodes',
+      function(res) {
+        test.equal(typeof res.data, 'object');
+        test.ok(res.data.hasOwnProperty('test-node'));
+        test.done();
+      });
+  },
 
-//   },
+  'delete-node': function(test) {
 
-//   'delete-node': function(test) {
-//     test.expect(5);
+    test.expect(2);
+    http.del(
+      test,
+      'nodes/test-node',
+      function(res) {
+        // inpsect to check node was deleted
+        http.get(
+          test,
+          'nodes/test-node',
+          {},
+          {status: 404},
+          function(res) {
+            test.done();
+          });
 
-//     var server = new Lancaster(config);
+        // http.get(
+        //   test,
+        //   'nodes',
+        //   function(res) {
+        //     test.equal(typeof res.data, 'object');
+        //     test.equal(res.data.hasOwnProperty('test-node'), false);
+        //     test.done();
+        //   });
+        //test.done();
+      });
+  },
 
-//     server.on('stop', function(){
-//       test.done();
-//     });
 
-//     server.on('start', function(){
-//       server.reset(function(){
-//         http.post(
-//           test, 
-//           'nodes', {
-//             data:{
-//               'id': 'test-node'
-//             }
-//           }, {
-//             status: 204
-//           }, function(res) {
+  'create-with-attrs': function(test) {
+    test.expect(4);
 
-//             http.del(
-//               test, 
-//               'nodes/test-node', 
-//               {},
-//               {status: 204},
-//               function(res) {
+    http.post(
+      test,
+      'nodes',
+      {data:{
+        'id': 'test-attrs',
+        'fn': 'thru',
+        attrs:{'my-value': 500}
+      }},
+      function(res) {
+        http.get(
+          test,
+          'nodes/test-attrs',
+          function(res) {
+            test.equal(typeof res.data, 'object');
+            test.equal(res.data.attrs['my-value'], 500);
+            // should have latched most recent processed
+            // message
+            //test.deepEqual(res.data.message, myMessage);
+            test.done();
+          });
+      });
+  },
 
-//                 http.get( test, 'nodes', function(res) {
-//                   test.equal(typeof res.data, 'object');
-//                   test.equal(res.data.hasOwnProperty('test-node'), false);
-//                   server.stop();
-//                 });
-//               });
+  'set-attrs': function(test) {
+    test.expect(4);
+    http.post(
+      test,
+      'nodes/test-attrs',
+      {data: {'my-value': 1000}},
+      function(res) {
+        
+        // get latched message
+        http.get(
+          test,
+          'nodes/test-attrs',
+          function(res) {
+            test.equal(typeof res.data, 'object'); 
+            test.equal(res.data.attrs['my-value'], 1000);
+            test.done();
+          });
+      });
+  },
 
-//           });
-//       });
-//     });
-    
-//     server.start();
+  // 'inject': function(test) {
+  //   //test.expect(5);
 
-//   },
+  //   http.post(
+  //     test,
+  //     'nodes',
+  //     {data:{
+  //       'id': 'test-thru',
+  //       'fn': 'thru'
+  //     }},
+  //     function(res) {
+  //       var myMessage = {value: 1000.00};
 
-//   'inject': function(test) {
-//     //test.expect(5);
+  //       http.post(
+  //         test,
+  //         'nodes/test-thru/message',
+  //         {data: myMessage},
+  //         function(res) {
+  //           console.log(res.data);
 
-//     var server = new Lancaster(config);
+  //           // get latched message
+  //           http.get(
+  //             test,
+  //             'nodes/test-thru',
+  //             function(res) {
+  //               console.log(res.data);
+  //               test.equal(typeof res.data, 'object');
+  //               // should have latched most recent processed
+  //               // message
+  //               console.log(res.data);
+  //               //test.deepEqual(res.data.message, myMessage);
+  //               test.done();
+  //             });
 
-//     server.on('stop', function(){
-//       test.done();
-//     });
-
-//     server.on('start', function(){
-//       server.reset(function(){
-//         http.post(
-//           test, 
-//           'nodes', 
-//           {data:{
-//             'id': 'test-node', 
-//             'factor':10,
-//             'fn': 'multiply'
-//           }},
-//           {status: 204}, 
-//           function(res) {
-//             var myMessage = {value: 1000.00};
-
-//             http.post(
-//               test, 
-//               'nodes/test-node/message', 
-//               {data: myMessage},
-//               {status: 204}, 
-//               function(res) {
-//                 // get latched message
-//                 http.get(
-//                   test, 
-//                   'nodes/test-node', 
-//                   function(res) {
-//                     test.equal(typeof res.data, 'object');
-//                     // should have latched most recent processed
-//                     // message
-//                     test.deepEqual(res.data.message, myMessage);
-//                     server.stop();
-//                   });
-                
-//               });
-//           });
-//       });
-//     });
-    
-//     server.start();
-
-//   },
+  //         });
+  //     });
+  // },
 
   'stop': function(test) {
     server.stop(function(){
