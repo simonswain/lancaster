@@ -30,7 +30,44 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="string">"use strict"</span>;</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="string">"use strict"</span>;
+
+<span class="keyword">var</span> Hapi = require(<span class="string">'hapi'</span>);
+<span class="keyword">var</span> async = require(<span class="string">'async'</span>);
+
+<span class="keyword">var</span> Topology = require(<span class="string">'./topology.js'</span>);
+
+<span class="keyword">var</span> Server = <span class="function"><span class="keyword">function</span><span class="params">(config, done)</span>{</span>
+
+  <span class="keyword">var</span> self = <span class="keyword">this</span>;
+
+  config = config || {};
+
+  <span class="keyword">if</span>(!config.hasOwnProperty(<span class="string">'host'</span>)){
+    config.host = <span class="string">'0.0.0.0'</span>;
+  }
+
+  <span class="keyword">if</span>(!config.hasOwnProperty(<span class="string">'port'</span>)){
+    config.port = <span class="number">4002</span>;
+  }
+
+  <span class="keyword">var</span> server = <span class="keyword">this</span>.server = Hapi.createServer(config.host, config.port);
+
+  server.route({
+    method: <span class="string">'GET'</span>,
+    path: <span class="string">'/'</span>,
+    handler: <span class="function"><span class="keyword">function</span> <span class="params">(request, reply)</span> {</span>
+      reply({<span class="string">'lancaster'</span>:config});
+    }
+  });
+
+  server.route({
+    method: <span class="string">'GET'</span>,
+    path: <span class="string">'/ping'</span>,
+    handler: <span class="function"><span class="keyword">function</span> <span class="params">(request, reply)</span> {</span>
+      reply({pong: <span class="keyword">new</span> Date().getTime()});
+    }
+  });</pre></div></div>
             
         </li>
         
@@ -41,12 +78,151 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>redo this with HAPI</p>
+              <p>system status</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>
-module.exports = <span class="function"><span class="keyword">function</span><span class="params">(opts)</span>
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">this</span>.server.route({
+    method: <span class="string">'GET'</span>,
+    path: <span class="string">'/status'</span>,
+    handler: <span class="function"><span class="keyword">function</span> <span class="params">(request, reply)</span> {</span>
+      reply({status: <span class="string">'ok'</span>});
+    }
+  });
+
+  server.route({
+    method: <span class="string">'GET'</span>,
+    path: <span class="string">'/nodes'</span>,
+    handler: <span class="function"><span class="keyword">function</span> <span class="params">(request, reply)</span> {</span>
+      self.topo.all(<span class="function"><span class="keyword">function</span><span class="params">(err, nodes)</span>{</span>
+        reply(nodes);
+      });
+    }
+  });
+
+  server.route({
+    method: <span class="string">'GET'</span>,
+    path: <span class="string">'/nodes/{id}'</span>,
+    handler: <span class="function"><span class="keyword">function</span> <span class="params">(request, reply)</span> {</span>
+      self.topo.get(request.params.id, <span class="function"><span class="keyword">function</span><span class="params">(err, node)</span>{</span>
+        <span class="keyword">if</span>(!node){ 
+          <span class="keyword">return</span> reply(<span class="string">'Not Found'</span>).code(<span class="number">404</span>);
+        }
+        reply(node);
+      });
+    }
+  });
+
+
+  server.route({
+    method: <span class="string">'POST'</span>,
+    path: <span class="string">'/nodes'</span>,
+    handler: <span class="function"><span class="keyword">function</span> <span class="params">(request, reply)</span> {</span>
+
+      <span class="keyword">if</span>(!request.payload.hasOwnProperty(<span class="string">'id'</span>)){
+        <span class="keyword">return</span> reply(<span class="string">'Invalid'</span>).code(<span class="number">400</span>);
+      }
+
+      <span class="keyword">var</span> node = {
+        sources: []
+      };
+
+      <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> request.payload){
+        node[key] = request.payload[key];
+      }
+
+      self.topo.add(node, <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+        self.topo.get(node.id, <span class="function"><span class="keyword">function</span><span class="params">(err, node)</span>{</span>
+          <span class="keyword">if</span>(!node){ 
+            <span class="keyword">return</span> reply(<span class="string">'Not Found'</span>).code(<span class="number">404</span>);
+          }
+          reply(node);
+        });
+      });
+
+    }
+  });
+
+  server.route({
+    method: <span class="string">'DELETE'</span>,
+    path: <span class="string">'/nodes/{id}'</span>,
+    handler: <span class="function"><span class="keyword">function</span> <span class="params">(request, reply)</span> {</span>
+      self.topo.del(request.params.id, <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+        reply();
+      });
+    }
+  });
+
+
+  server.route({
+    method: <span class="string">'POST'</span>,
+    path: <span class="string">'/nodes/{id}/message'</span>,
+    handler: <span class="function"><span class="keyword">function</span> <span class="params">(request, reply)</span> {</span>
+
+      <span class="keyword">var</span> msg = request.payload;
+      self.topo.get(request.params.id, <span class="function"><span class="keyword">function</span><span class="params">(err, node)</span>{</span>
+        
+        <span class="keyword">if</span>(!node){ 
+          <span class="keyword">return</span> reply(<span class="string">'Not Found'</span>).code(<span class="number">404</span>);
+        }
+        self.topo.inject(
+          node.id, 
+          msg,
+          <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+            reply(node);
+          });
+      });
+    }
+  });
+
+
+  server.route({
+    method: <span class="string">'POST'</span>,
+    path: <span class="string">'/nodes/{id}'</span>,
+    handler: <span class="function"><span class="keyword">function</span> <span class="params">(request, reply)</span> {</span>
+
+      <span class="keyword">var</span> attrs = request.payload;
+      self.topo.get(request.params.id, <span class="function"><span class="keyword">function</span><span class="params">(err, node)</span>{</span>
+        
+        <span class="keyword">if</span>(!node){ 
+          <span class="keyword">return</span> reply(<span class="string">'Not Found'</span>).code(<span class="number">404</span>);
+        }
+        self.topo.set(
+          node.id, 
+          attrs,
+          <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+            reply(node);
+          });
+      });
+    }
+  });
+
+
+  <span class="keyword">this</span>.topo = <span class="keyword">new</span> Topology(config, <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+    done();
+  });
+
+};
+
+Server.prototype.start = <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
+  <span class="keyword">this</span>.server.start(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+    done();
+  });
+};
+
+Server.prototype.stop = <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
+  <span class="keyword">var</span> self = <span class="keyword">this</span>;
+  <span class="keyword">this</span>.server.stop(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>    
+    self.topo.quit(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+      done();
+    });
+  });
+};
+
+module.exports = Server;
+
+
+module.exportsOLD = <span class="function"><span class="keyword">function</span><span class="params">(opts)</span>
 {</span>
 
   <span class="keyword">var</span> fs = require(<span class="string">'fs'</span>);

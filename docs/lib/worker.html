@@ -47,7 +47,9 @@
   <span class="keyword">this</span>.topology = <span class="keyword">new</span> Topology(
     config, 
     <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
-      done();
+      <span class="keyword">if</span>(done &amp;&amp; <span class="keyword">typeof</span> done === <span class="string">'function'</span>){
+        done();
+      }
     });
 
 };</pre></div></div>
@@ -289,9 +291,11 @@ the runner wants to distribute it outside the topology</p>
 
   <span class="keyword">this</span>.processing = <span class="literal">true</span>;
 
-  process.nextTick(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+  <span class="keyword">var</span> go = <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
     self.run();
-  });
+  };
+
+  process.nextTick(go);
 
   <span class="keyword">if</span>(done){
     done();
@@ -329,12 +333,15 @@ the runner wants to distribute it outside the topology</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="keyword">this</span>.onStopProcessing = done;
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">this</span>.onStopProcessing = <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+    self.topology.quit(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+      done();
+    });
 
-  <span class="keyword">if</span>(<span class="keyword">this</span>.runTimer){
-    clearTimeout(<span class="keyword">this</span>.runTimer);
-  }
+  };
+
   <span class="keyword">this</span>.processing = <span class="literal">false</span>;
+
 };</pre></div></div>
             
         </li>
@@ -416,11 +423,23 @@ Worker.prototype.run = <span class="function"><span class="keyword">function</sp
   <span class="keyword">var</span> self = <span class="keyword">this</span>;
 
   <span class="keyword">if</span>(!<span class="keyword">this</span>.processing){
+    console.log(<span class="string">'P'</span>, self.processing);
     <span class="keyword">if</span>(<span class="keyword">this</span>.onStopProcessing){
       <span class="keyword">this</span>.onStopProcessing();
     }
     <span class="keyword">return</span>;
-  }</pre></div></div>
+  }
+
+  <span class="keyword">var</span> go = <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+    <span class="keyword">if</span>(!self.processing){      
+      <span class="keyword">if</span>(self.onStopProcessing){
+        self.onStopProcessing();
+      }
+      <span class="keyword">return</span>;
+    }
+
+    self.run();
+  };</pre></div></div>
             
         </li>
         
@@ -450,7 +469,7 @@ Worker.prototype.run = <span class="function"><span class="keyword">function</sp
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span>(!!id){</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span>(id === <span class="literal">null</span>){</pre></div></div>
             
         </li>
         
@@ -465,7 +484,7 @@ Worker.prototype.run = <span class="function"><span class="keyword">function</sp
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      self.runTimer = setTimeout(self.run, <span class="number">250</span>);
+            <div class="content"><div class='highlight'><pre>      self.runTimer = setTimeout(go, <span class="number">250</span>);
       <span class="keyword">return</span>;
     }</pre></div></div>
             
@@ -514,7 +533,7 @@ are processed fast as possible</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        process.nextTick(self.run);
+            <div class="content"><div class='highlight'><pre>        process.nextTick(go);
       });
 
   });
