@@ -6,11 +6,15 @@ var server = new Lancaster.Server(config, function(){
 
 // handle shutdown gracefully
 process.on( 'SIGINT', function() {
-  //console.log( "\nShutting Down..." );
+  if(config.env === 'dev'){
+    console.log( "\nShutting Down..." );
+  }
   server.stop(function(){
   });
 });
 
 server.start(function(){
-  //console.log(JSON.stringify(config));
+  if(config.env === 'dev'){
+    console.log(JSON.stringify(config));
+  }
 });
