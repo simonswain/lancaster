@@ -1,4 +1,4 @@
-// "use strict";
+ "use strict";
 
 var config = require('./config.js');
 
@@ -263,43 +263,6 @@ exports['server'] = {
       });
   },
 
-  // 'inject': function(test) {
-  //   //test.expect(5);
-
-  //   http.post(
-  //     test,
-  //     'nodes',
-  //     {data:{
-  //       'id': 'test-thru',
-  //       'fn': 'thru'
-  //     }},
-  //     function(res) {
-  //       var myMessage = {value: 1000.00};
-
-  //       http.post(
-  //         test,
-  //         'nodes/test-thru/message',
-  //         {data: myMessage},
-  //         function(res) {
-  //           console.log(res.data);
-
-  //           // get latched message
-  //           http.get(
-  //             test,
-  //             'nodes/test-thru',
-  //             function(res) {
-  //               console.log(res.data);
-  //               test.equal(typeof res.data, 'object');
-  //               // should have latched most recent processed
-  //               // message
-  //               console.log(res.data);
-  //               //test.deepEqual(res.data.message, myMessage);
-  //               test.done();
-  //             });
-
-  //         });
-  //     });
-  // },
 
   'stop': function(test) {
     server.stop(function(){
