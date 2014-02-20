@@ -1,6 +1,6 @@
 # Lancaster
 
-Version 0.0.2
+Version 0.0.3
 
 [![Build Status](https://travis-ci.org/simonswain/lancaster.png)](https://travis-ci.org/simonswain/lancaster)
 
@@ -118,10 +118,23 @@ extract (done)
 ## Server REST methods
 
 
-REST NOTES BELOW ARE OUT OF DATE
+Get server config
+```
+GET /
+
+{"lancaster":{"env":"dev","redis":{"host":"127.0.0.1","port":6379,"prefix":"lancaster_dev"},"host":"0.0.0.0","port":4002}}
+```
+
+Get server status
+```
+GET /
+
+{"status":"ok"}
+```
 
 
 Ping test to check server is up
+
 ```
 GET /ping
 
