@@ -13,7 +13,7 @@ results from.
 {at: 1386197370482, value: 100.00}
 ```
 
-Running the Lancaster server provids you with an empty topology.
+Running the Lancaster server provides you with an empty topology.
 
 You create nodes in the Lancaster topology. 
 
