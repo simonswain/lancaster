@@ -30,7 +30,7 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="string">"use strict"</span>;</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-pi">"use strict"</span>;</pre></div></div>
             
         </li>
         
@@ -47,12 +47,12 @@ with it’s own when instantiating the Topology.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>
-<span class="keyword">var</span> fns = module.exports = {};
+<span class="hljs-keyword">var</span> fns = <span class="hljs-built_in">module</span>.exports = {};
 
 fns.thru = {
 
-  process: <span class="function"><span class="keyword">function</span><span class="params">(attrs, message, done)</span>{</span>
-    done(<span class="literal">null</span>, attrs, message);
+  process: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(attrs, message, done)</span></span>{
+    done(<span class="hljs-literal">null</span>, attrs, message);
   }
 
 };
@@ -73,10 +73,10 @@ fns.count = {</pre></div></div>
             </div>
             
             <div class="content"><div class='highlight'><pre>  attrs: {
-    total: <span class="number">0</span>
+    total: <span class="hljs-number">0</span>
   },
 
-  init: <span class="function"><span class="keyword">function</span><span class="params">(done)</span>{</span>
+  init: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(done)</span></span>{
     done();
   },</pre></div></div>
             
@@ -95,99 +95,12 @@ update state</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>
-  process: <span class="function"><span class="keyword">function</span><span class="params">(attrs, message, done)</span>{</span>
+  process: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(attrs, message, done)</span></span>{
     attrs.total ++;
-    done(<span class="literal">null</span>, attrs, {total:attrs.total});
+    done(<span class="hljs-literal">null</span>, attrs, {total:attrs.total});
   }
 
 };</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-5">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
-              </div>
-              <p>fns.multiply = {</p>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-6">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
-              </div>
-              <p>  // default atts for the fn
-  attrs: {
-    factor: 0
-  },</p>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-7">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
-              </div>
-              <p>  init: function(done){
-    done();
-  },</p>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-8">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
-              </div>
-              <p>  // attrs are passed in by reference, and changed as require by fn to
-  // update state</p>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-9">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
-              </div>
-              <p>  process: function(attrs, message, done){
-    var ans = message.value * 10;
-    done(null, attrs, {value: ans});
-  }</p>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-10">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
-              </div>
-              <p>};</p>
-
-            </div>
             
         </li>
         

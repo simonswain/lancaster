@@ -1,6 +1,4 @@
-"use strict";
-
-var env = process.env.NODE_ENV || 'dev';
+var env = process.env.NODE_ENV || 'development';
 
 var key = 'lancaster';
 
@@ -10,17 +8,19 @@ var redis = {
   prefix: key + '_' + env
 };
 
+exports.host = localhost;
+
 switch ( env ) {
 case 'test' :
   exports.port = 4003;
   break;
 
-case 'dev' :
+case 'development' :
   exports.port = 4002;
   break;
 
-case 'live' :
-  exports.listen = '/tmp/' + key + '.sock';
+case 'production' :
+  exports.port = 4001;
   break;
 }
 

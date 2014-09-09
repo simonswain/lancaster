@@ -60,6 +60,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test', ['jshint', 'env:test', 'nodeunit:files']);
 
-  grunt.registerTask('default', ['test', 'docco']);
+  grunt.registerTask('default', ['test']);
 
 };
