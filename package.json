@@ -30,7 +30,7 @@
   "dependencies": {
     "async": "^0.9.0",
     "grunt": "^0.4.5",
-    "hapi": "^6.7.1",
+    "hapi": "^6.8.1",
     "hiredis": "^0.1.17",
     "padder": "0.0.1",
     "redis": "^0.12.1",
