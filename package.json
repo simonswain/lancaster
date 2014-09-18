@@ -1,7 +1,7 @@
 {
   "name": "lancaster",
   "description": "Reactive data API service",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "homepage": "https://github.com/simonswain/lancaster",
   "author": {
     "name": "Simon Swain",
