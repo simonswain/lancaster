@@ -1,41 +1,27 @@
 "use strict";
 
-var Lancaster = require('../index.js');
-var config = require('./config.js');
-
 var async = require('async');
+var api = require('../lib').api();
 
-var topo, myNode, myData, myId;
+var myNode, myData, myId;
 
-exports['topology'] = {
-
-  'create': function(test) {
-    topo = new Lancaster.Topology(
-      config,
-      function(){
-        test.done();
-      });
-  },
-
+exports.api = {
   'reset': function(test) {
-    topo.reset(
-      function(){
-        test.done();
-      });
+    api.reset(function() {
+      test.done();
+    });
   },
-
   'nodes-none': function(test) {
     test.expect(1);
-    topo.all(
+    api.all(
       function(err, nodes){
         test.deepEqual(nodes, {});
         test.done();
       });
   },
-  
   'get-none': function(test) {
     test.expect(1);
-    topo.get(
+    api.get(
       'foo', 
       function(err, node){
         test.equal(node, null);
@@ -47,14 +33,14 @@ exports['topology'] = {
     myNode = {
       'id': 'test'
     };
-    topo.add(myNode, function(){
+    api.add(myNode, function(){
       test.done();
     });
   },
 
   'get': function(test) {
     test.expect(1);
-    topo.get(
+    api.get(
       'test', 
       function(err, node){
         test.equal(node.id, myNode.id);
@@ -67,7 +53,7 @@ exports['topology'] = {
     myNode = {
       'id': 'test'
     };
-    topo.add(myNode, function(err){
+    api.add(myNode, function(err){
       test.ok(err);
       test.done();
     });
@@ -75,7 +61,7 @@ exports['topology'] = {
 
   'nodes-all': function(test) {
     test.expect(2);
-    topo.all(
+    api.all(
       function(err, nodes){
         test.equal(typeof nodes.test, 'object');
         test.equal(nodes.test.id, myNode.id);
@@ -85,10 +71,10 @@ exports['topology'] = {
 
   'delete': function(test) {
     test.expect(1);
-    topo.del(
+    api.del(
       'test', 
       function(){
-        topo.get(
+        api.get(
           'test', 
           function(err, node){
             test.equal(node, null);
@@ -103,8 +89,8 @@ exports['topology'] = {
       'id': 'test-attrs',
       'attrs': {foo: 'bar'}
     };
-    topo.add(myNode, function(){
-      topo.get('test-attrs', function(err, node){
+    api.add(myNode, function(){
+      api.get('test-attrs', function(err, node){
         test.equals(node.id, myNode.id);
         test.deepEqual(node.attrs, myNode.attrs);
         test.done();
@@ -120,11 +106,11 @@ exports['topology'] = {
       'id': 'test-attrs',
       'attrs': {foo: 'baz'}
     };
-    topo.attrs(
+    api.attrs(
       myNode.id, 
       myNode.attrs,
       function(){
-        topo.get(
+        api.get(
           myNode.id, 
           function(err, node){
             test.equals(node.id, myNode.id);
@@ -137,7 +123,7 @@ exports['topology'] = {
 
   'attrs-get': function(test) {
     test.expect(1);
-    topo.attrs(
+    api.attrs(
       myNode.id, 
       function(err, attrs){
         test.deepEqual(attrs, myNode.attrs);
@@ -152,11 +138,11 @@ exports['topology'] = {
       'id': 'test-attrs',
       'attrs': {foo: 'qux'}
     };
-    topo.setAttrs(
+    api.setAttrs(
       myNode.id, 
       myNode.attrs,
       function(){
-        topo.getAttrs(
+        api.getAttrs(
           myNode.id, 
           function(err, attrs){
             test.deepEqual(attrs, myNode.attrs);
@@ -168,10 +154,10 @@ exports['topology'] = {
 
   'del-attrs': function(test) {
     test.expect(1);
-    topo.delAttrs(
+    api.delAttrs(
       myNode.id, 
       function(){
-        topo.getAttrs(
+        api.getAttrs(
           myNode.id, 
           function(err, attrs){
             test.deepEqual(attrs, {});
@@ -188,10 +174,10 @@ exports['topology'] = {
       'sources': ['input', 'another']
     };
 
-    topo.add(
+    api.add(
       myNode,
       function(){
-        topo.get(
+        api.get(
           myNode.id, 
           function(err, node){
             test.equals(node.id, myNode.id);
@@ -206,11 +192,11 @@ exports['topology'] = {
 
   'add-source': function(test) {
     test.expect(1);
-    topo.addSource(
+    api.addSource(
       myNode.id,
       'robots',
       function(){
-        topo.getSources(
+        api.getSources(
           myNode.id, 
           function(err, sources){
             test.ok(sources.indexOf('robots') > -1);
@@ -222,10 +208,10 @@ exports['topology'] = {
 
   'get-sources': function(test) {
     test.expect(2);
-    topo.getSources(
+    api.getSources(
       myNode,
       function(){
-        topo.getSources(
+        api.getSources(
           myNode.id, 
           function(err, sources){
             test.ok(sources.indexOf(myNode.sources[0]) > -1);
@@ -238,11 +224,11 @@ exports['topology'] = {
 
   'get-targets': function(test) {
     test.expect(1);
-    topo.addSource(
+    api.addSource(
       'test-attrs',
       'test-source',
       function(){
-        topo.getTargets(
+        api.getTargets(
           'test-source', 
           function(err, targets){
             test.equals(targets[0], 'test-attrs');
@@ -254,11 +240,11 @@ exports['topology'] = {
 
   'del-source': function(test) {
     test.expect(1);
-    topo.delSource(
+    api.delSource(
       myNode.id,
       myNode.sources[0],
       function(){
-        topo.getSources(
+        api.getSources(
           myNode.id, 
           function(err, sources){
             test.ok(sources.indexOf(myNode.sources[0]) === -1);
@@ -271,10 +257,10 @@ exports['topology'] = {
 
   'del-sources': function(test) {
     test.expect(1);
-    topo.delSources(
+    api.delSources(
       myNode.id,
       function(){
-        topo.getSources(
+        api.getSources(
           myNode.id, 
           function(err, sources){
             test.equals(sources.length, 0);
@@ -291,11 +277,11 @@ exports['topology'] = {
 
     var myData = {foo: 'bar'};
 
-    topo.setData(
+    api.setData(
       myNode.id,
       myData,
       function(){
-        topo.getData(
+        api.getData(
           myNode.id, 
           function(err, data){
             test.deepEqual(data, myData);
@@ -311,7 +297,7 @@ exports['topology'] = {
     myData = {value: 1000.00};
     myId = 'test-id';
 
-    topo.inject(
+    api.inject(
       myId,
       myData,
       function(err){
@@ -324,7 +310,7 @@ exports['topology'] = {
 
   'extract': function(test){
     test.expect(3);
-    topo.extract(
+    api.extract(
       function(err, id, data){
         test.equals(err, null);
         test.equals(id, myId);
@@ -338,15 +324,15 @@ exports['topology'] = {
   'purge': function(test){
     test.expect(3);
 
-    topo.inject(
+    api.inject(
       myId,
       myData,
       function(err){
 
-        topo.purge(
+        api.purge(
           function(err){
 
-            topo.extract(
+            api.extract(
               function(err, id, data){
                 test.equals(err, null);
                 test.equals(id, null);
@@ -359,30 +345,25 @@ exports['topology'] = {
   },
 
   'reset-final': function(test) {
-
-    topo.reset(
+    api.reset(
       function(){
         test.done();
       });
-
   },
 
   'reset-clean?': function(test) {
     test.expect(1);
-    topo.all(
+    api.all(
       function(err, nodes){
         test.deepEqual(nodes, {});
         test.done();
       });
   },
 
-
   'quit': function(test) {
-    topo.quit(
-      function(){
-        test.done();
-      });
+    api.quit(function() {
+      test.done();
+    });
   }
-
 
 };

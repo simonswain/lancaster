@@ -1,12 +1,19 @@
 # Lancaster
 
-Version 0.0.3
+Version 0.0.4
 
 [![Build Status](https://travis-ci.org/simonswain/lancaster.png)](https://travis-ci.org/simonswain/lancaster)
 
-Lancaster provides a REST based application server that lets you
-configure processing topologies you inject data into and recieve
-results from.
+Lancaster is a dynamic reactive dataflow system
+
+You use Lancaster to construct topologies of connected processing
+nodes that consume and emit arbitrary JSON messages.
+
+A worker process manages message processing.
+
+Clients can access Lancaster either via a Javascript object (direct
+api access) or via a REST/Websocket application server.
+
 
 ```javascript
 // example message
@@ -317,5 +324,5 @@ curl -i -X DELETE http://localhost:4002/nodes/my-node
 * 23/11/2013 0.0.1 Initial release
 
 ## License
-Copyright (c) 2013 Simon Swain
+Copyright (c) 2014 Simon Swain
 Licensed under the MIT license.

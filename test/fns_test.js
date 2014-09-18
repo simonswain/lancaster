@@ -7,7 +7,7 @@ var fns = require('../lib/fns.js');
 
 var myAttrs, myMessage;
 
-exports['fns'] = {
+exports.fns = {
 
   'thru': function(test){
     test.expect(2);

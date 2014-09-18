@@ -1,30 +1,34 @@
 var env = process.env.NODE_ENV || 'development';
 
-var key = 'lancaster';
+var prefix = 'df';
 
 var redis = {
   host: '127.0.0.1',
   port: 6379,
-  prefix: key + '_' + env
 };
 
-exports.host = localhost;
+var server = {
+  host: '127.0.0.1',
+  port: 4002
+};
 
 switch ( env ) {
 case 'test' :
-  exports.port = 4003;
+  server.port = 4003;
   break;
 
 case 'development' :
-  exports.port = 4002;
+  server.port = 4002;
   break;
 
 case 'production' :
-  exports.port = 4001;
+  server.port = 4001;
   break;
 }
 
 module.exports = {
+  prefix: prefix,
   env: env,
-  redis: redis
+  redis: redis,
+  server: server
 };

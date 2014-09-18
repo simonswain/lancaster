@@ -2,47 +2,21 @@
 
 var async = require('async');
 
-var Lancaster = require('../index.js');
-var config = require('./config.js');
+var api = require('../lib').api();
+var worker = require('../lib').worker();
 
-var topo, worker, myNode, myData;
+var myNode, myData;
 
 myData = {value: 1000.00};
 
 // test message queue
 
-exports['process'] = {
-
-  'create-topo': function(test) {
-
-    // stub test to copy and change
-    topo = new Lancaster.Topology(
-      config,
-      function(){
-        test.done();
-      });
-
-  },
+exports.worker = {
 
   'reset': function(test) {
-
-    // stub test to copy and change
-    topo.reset(
-      function(){
-        test.done();
-      });
-
-  },
-
-  'create-worker': function(test) {
-
-    // stub test to copy and change
-    worker = new Lancaster.Worker(
-      config,
-      function(){
-        test.done();
-      });
-
+    api.reset(function() {
+      test.done();
+    });
   },
 
   'add-node': function(test) {
@@ -50,14 +24,14 @@ exports['process'] = {
       id: 'test',
       fn: 'thru'
     };
-    topo.add(myNode, function(){
+    api.add(myNode, function(){
       test.done();
     });
   },
 
   'get-data-pre': function(test) {
-    //test.expect(1);
-    topo.getData(
+    test.expect(1);
+    api.getData(
       myNode.id, 
       function(err, data){
         test.equals(data, null);
@@ -66,7 +40,7 @@ exports['process'] = {
   }, 
 
   'inject': function(test){
-    topo.inject(
+    api.inject(
       myNode.id,
       myData,
       function(err){
@@ -88,7 +62,7 @@ exports['process'] = {
   // output should have been latched on node
   'get-data-post': function(test) {
     test.expect(1);
-    topo.getData(
+    api.getData(
       myNode.id, 
       function(err, data){
         test.deepEqual(data, myData);
@@ -102,22 +76,22 @@ exports['process'] = {
     async.series([
 
       function(next){ 
-        topo.reset(next);
+        api.reset(next);
       },
 
       function(next){ 
-        topo.purge(next);
+        api.purge(next);
       },
 
       function(next){
-        topo.add({
+        api.add({
           'id': 'sender', 
           'fn': 'thru'
         }, next);
       },
 
       function(next){
-        topo.add({
+        api.add({
           'id': 'receiver', 
           'fn': 'thru',
           'sources': ['sender']
@@ -125,7 +99,7 @@ exports['process'] = {
       },
 
       function(next){
-        topo.inject(
+        api.inject(
           'sender', 
           myData, 
           next
@@ -153,7 +127,7 @@ exports['process'] = {
 
       // myData has been passed thru receiver
       function(next){
-        topo.getData(
+        api.getData(
           'sender', 
           function(err, data){
             test.deepEqual(data, myData);
@@ -174,7 +148,7 @@ exports['process'] = {
 
 
     var add = function(node, done){
-      topo.add({
+      api.add({
         'id': node.id, 
         'fn': node.fn,
         'sources': node.sources
@@ -198,7 +172,7 @@ exports['process'] = {
     };
 
     var inject = function(x, done){
-      topo.inject(x.id, x.msg, done);
+      api.inject(x.id, x.msg, done);
     };
 
     // the values don't matter. just handy for tracking flow throught redis
@@ -243,7 +217,7 @@ exports['process'] = {
 
     // count should have accumulated on node
     var check = function(done){
-    topo.get(
+    api.get(
       'count-2', 
       function(err, node){
         test.equal(node.attrs.total, 4);
@@ -253,7 +227,7 @@ exports['process'] = {
 
     async.series([
       function(next){ 
-        topo.reset(function(){
+        api.reset(function(){
           next();
         });
       },
@@ -272,21 +246,23 @@ exports['process'] = {
   'reset-final': function(test) {
 
     // stub test to copy and change
-    topo.reset(
+    api.reset(
       function(){
         test.done();
       });
 
   },
 
-  'quit': function(test) {
-    worker.quit(
-      function(){
-        topo.quit(
-          function(){
-            test.done();
-          });
-      });
+  'quit-worker': function(test) {
+    worker.quit(function() {
+      test.done();
+    });
+  },
+
+  'quit-api': function(test) {
+    api.quit(function() {
+      test.done();
+    });
   }
 
 };

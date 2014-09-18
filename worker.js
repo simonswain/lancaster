@@ -1,18 +1,20 @@
 var config = require('./config.js');
 
 var Lancaster = require('./index.js');
-var worker = new Lancaster.Worker(config);
+var worker = Lancaster.worker(config);
 
 // handle shutdown gracefully
 process.on( 'SIGINT', function() {
-  if(config.env === 'dev'){
+  if(config.env === 'development'){
     console.log( "\nShutting Down..." );
   }
-  worker.stop(function(){});
+  worker.quit(function(){
+    console.log( "Done..." );
+  });
 });
 
 worker.start(function(){
-  if(config.env === 'dev'){
-    console.log(JSON.stringify(config));
+  if(config.env === 'development'){
+    console.log(JSON.stringify(config, null, 2));
   }
 });

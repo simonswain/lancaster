@@ -1,8 +1,6 @@
 //Nodes created/destroyed for each message. Pull attrs from redis,
 save back when done
 
-
-
 // redis prefix
 
 // save/restore nodes + opts from redis

@@ -1,43 +1,35 @@
- "use strict";
+"use strict";
 
-var config = require('./config.js');
+var config = require('../config.sample.js');
 
 var Lancaster = require('../index.js');
 
 var http = require('nodeunit-httpclient')
   .create({
-    port: config.port,
+    host: config.server.host,
+    port: config.server.port,
     path: '/',
     status: 200
   });
 
-var server, topo, worker;
+var api, worker, server;
 
-exports['server'] = {
+exports.server = {
 
-  'new-topo': function(test) {
-    topo = new Lancaster.Topology(config, function(){
-      test.done();
-    });
+  'new-api': function(test) {
+    api =  Lancaster.api(config);
+    test.done();
   },
 
   'new-worker': function(test) {
-    worker = new Lancaster.Worker(config, function(){
-      test.done();
-    });
+    worker =  Lancaster.worker(config);
+    test.done();
   },
 
   'new-server': function(test) {
-    server = new Lancaster.Server(config, function(){
-      test.done();
-    });
+    server =  Lancaster.server(config);
+    test.done();
   },
-
-  // 'reset': function(test) {
-  //   topo.reset(function(){
-  //     test.done();
-  //   });
-  // },
 
   'start': function(test) {
     server.start(function(){
@@ -45,21 +37,11 @@ exports['server'] = {
     });
   },
 
-  'reset': function(test) {
-    test.expect(1);
-    http.post(
-      test,
-      'reset',
-      function(res) {
-        test.done();
-      });
-  },
-
   'config': function(test) {
     test.expect(2);
     http.get(
       test,
-      '',
+      '',       
       function(res) {
         test.ok(res.data.hasOwnProperty('lancaster'));
         test.done();
@@ -76,6 +58,17 @@ exports['server'] = {
         test.done();
       });
   },
+
+  'rest-reset': function(test) {
+    test.expect(1);
+    http.post(
+      test,
+      'reset',
+      function(res) {
+        test.done();
+      });
+  },
+
 
   'inspect': function(test) {
     test.expect(2);
@@ -263,12 +256,22 @@ exports['server'] = {
       });
   },
 
-
-  'stop': function(test) {
+  'quit-server': function(test) {
     server.stop(function(){
       test.done();
     });
-  }
+  },
 
+  'quit-worker': function(test) {
+    worker.quit(function(){
+      test.done();
+    });
+  },
+
+  'quit-api': function(test) {
+    api.quit(function(){
+      test.done();
+    });
+  }
 
 };
