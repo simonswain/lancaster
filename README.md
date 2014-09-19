@@ -49,7 +49,7 @@ emitter or Websockets.
 
 ## Quickstart
 
-Landcaster comes bundled with a runner that starts up a server and a
+Lancaster comes bundled with a runner that starts up a server and a
 worker. This is the easiest way to get going quickly.
 
 ```bash
@@ -72,7 +72,7 @@ You can use the `curl` examples at the bottom of this README to try it out.
 
 ## Installing
 
-Landcaster requires Redis.
+Lancaster requires Redis.
 
 ```bash
 sudo apt-get install redis-server
@@ -152,7 +152,7 @@ control over the worker lifecycle.
 var Lancaster = require('lancaster');
 var worker = Lancaster.worker();
 worker.start(function(){
-  console.log('Landcaster Worker running...');
+  console.log('Lancaster Worker running...');
 });
 ```
 
