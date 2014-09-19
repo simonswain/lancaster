@@ -568,7 +568,7 @@ HTTP/1.1 404 Not Found
 Create a node
 
 ```
-curl -i -H "Content-Type: application/json" -X POST http://localhost:4002/nodes -d '{"id":"my-node", "fn":"multiply","factor":10}'
+curl -i -H "Content-Type: application/json" -X POST http://localhost:4002/nodes -d '{"id":"my-node", "fn":"multiply","attrs":{"factor":10}}'
 ```
 
 Get it
@@ -594,7 +594,7 @@ curl -i -X GET http://localhost:4002/nodes/my-node
 Create another node, using the same fn with different attrs, and listen to the first one:
 
 ```
-curl -i -H "Content-Type: application/json" -X POST http://localhost:4002/nodes -d '{"id":"other-node", "fn":"multiply","factor":2, "sources":["my-node"]}'
+curl -i -H "Content-Type: application/json" -X POST http://localhost:4002/nodes -d '{"id":"other-node", "fn":"multiply","attrs":{"factor":2}, "sources":["my-node"]}'
 ```
 
 
