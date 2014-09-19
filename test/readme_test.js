@@ -115,7 +115,7 @@ exports.readme = {
 
   'tick-1': function(test) {
     test.expect(2);
-    worker.tick(function(err, id, output){
+    api.tick(function(err, id, output){
       test.equal(id, 'my-node');
       test.deepEqual(output, {value: 1000});
       test.done();
@@ -139,7 +139,7 @@ exports.readme = {
 
   'tick-2': function(test) {
     test.expect(2);
-    worker.tick(function(err, id, output){
+    api.tick(function(err, id, output){
       test.equal(id, 'other-node');
       test.deepEqual(output, {value: 2000});
       test.done();

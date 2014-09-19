@@ -49,9 +49,9 @@ exports.worker = {
     );
   },
 
-  'worker-tick': function(test) {
+  'api-tick': function(test) {
     test.expect(1);
-    worker.tick(
+    api.tick(
       function(err, id, output){
         // check fn passed thru
         test.deepEqual(output, myData);
@@ -108,7 +108,7 @@ exports.worker = {
 
       // queue(sender) -> sender -> queue(receiver)
       function(next){
-        worker.tick(function(err, id, output){
+        api.tick(function(err, id, output){
           test.equals(id, 'sender');
           test.deepEqual(output, myData); 
           next();
@@ -117,7 +117,7 @@ exports.worker = {
 
       // queue(receiver) -> receiver
       function(next){
-        worker.tick(function(err, id, output){
+        api.tick(function(err, id, output){
           // no output
           test.equals(id, 'receiver');
           test.deepEqual(output, myData);
@@ -206,7 +206,7 @@ exports.worker = {
       async.timesSeries(
         messages.length, 
         function(x, next){
-          worker.tick(function(err, id, output){
+          api.tick(function(err, id, output){
             next();
           });
         }, function(){

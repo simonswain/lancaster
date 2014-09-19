@@ -192,7 +192,7 @@ exports.server = {
           {status: 200}, 
           function(res) {
             // get latched message
-            worker.tick(function(err, id, output){            
+            api.tick(function(err, id, output){            
               http.get(
                 test, 
                 'nodes/test-node', 
