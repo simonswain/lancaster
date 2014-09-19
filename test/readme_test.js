@@ -14,7 +14,7 @@ var http = require('nodeunit-httpclient')
 
 var api, worker, server;
 
-exports.server = {
+exports.readme = {
 
   'new-api': function(test) {
     api =  Lancaster.api(config);

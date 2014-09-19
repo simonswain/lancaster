@@ -34,7 +34,8 @@
     "hiredis": "^0.1.17",
     "padder": "0.0.1",
     "redis": "^0.12.1",
-    "underscore": "^1.7.0"
+    "underscore": "^1.7.0",
+    "ws": "^0.4.32"
   },
   "devDependencies": {
     "grunt-contrib-jshint": "^0.10.0",
