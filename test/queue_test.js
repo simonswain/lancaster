@@ -11,7 +11,7 @@ myData = {value: 1000.00};
 
 // test message queue
 
-exports.worker = {
+exports.queue = {
 
   'reset': function(test) {
     api.reset(function() {
