@@ -15,6 +15,6 @@ process.on( 'SIGINT', function() {
 
 worker.start(function(){
   if(config.env === 'development'){
-    console.log(JSON.stringify(config, null, 2));
+    //console.log(JSON.stringify(config, null, 2));
   }
 });
