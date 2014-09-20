@@ -2,16 +2,21 @@
 
 var async = require('async');
 
-var api = require('../lib').api();
-var worker = require('../lib').worker();
+var config = require('../config.sample.js');
+var Lancaster = require('../index.js');
+
+var api;
 
 var myNode, myData;
-
-myData = {value: 1000.00};
 
 // test message queue
 
 exports.queue = {
+
+  'new-api': function(test) {
+    api = Lancaster.api(config);
+    test.done();
+  },
 
   'reset': function(test) {
     api.reset(function() {
@@ -40,6 +45,7 @@ exports.queue = {
   }, 
 
   'inject': function(test){
+    myData = {value: 1000.00};
     api.inject(
       myNode.id,
       myData,
@@ -251,12 +257,6 @@ exports.queue = {
         test.done();
       });
 
-  },
-
-  'quit-worker': function(test) {
-    worker.quit(function() {
-      test.done();
-    });
   },
 
   'quit-api': function(test) {
