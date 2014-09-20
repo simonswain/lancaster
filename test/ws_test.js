@@ -4,6 +4,8 @@ var config = require('../config.sample.js');
 
 var Lancaster = require('../index.js');
 
+var myNode, myData;
+
 var http = require('nodeunit-httpclient')
   .create({
     host: config.server.host,
@@ -56,10 +58,18 @@ exports.ws = {
 
   'create-my-node': function(test) {
     test.expect(1);
+    myNode = {
+      "id":"my-node", 
+      "fn":"multiply",
+      "attrs":{
+        "factor":10
+      }
+    };
+
     http.post(
       test,
       'nodes', {
-        data:{"id":"my-node", "fn":"multiply","attrs":{"factor":10}}
+        data: myNode
       }, {
         status: 200
       }, function(res) {
@@ -70,7 +80,7 @@ exports.ws = {
   'set-attrs': function(test) {
     var data = [
       'setAttrs',
-      'my-node',
+      myNode.id,
       {'my-value': 500}
     ];  
     var s = JSON.stringify(data);
@@ -89,6 +99,38 @@ exports.ws = {
         test.done();
       });
   },
+
+  'inject': function(test){
+    myData = {value: 1000.00};
+    api.inject(
+      myNode.id,
+      myData,
+      function(err){
+        test.done();
+      }
+    );
+  },
+
+  'api-tick': function(test) { 
+    // receive outputs over websockets
+    var myWs = new Ws('ws://' + config.server.host + ':' + config.server.port);
+    var handler = function(x){
+      x = JSON.parse(x);
+      var method = x[0];
+      var id = x[1];
+      var args = x[2];
+      test.equals(method, 'setData');
+      test.equals(id, myNode.id);
+      // check result from node fn
+      test.equals(args.value, myData.value * myNode.attrs.factor);
+      myWs.terminate();
+      test.done();
+    };
+    myWs.on('message', handler);
+    api.tick(
+      function(err, id, output){
+      });
+  }, 
 
   'quit-ws': function(test) {
     ws.terminate();
