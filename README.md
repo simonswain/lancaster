@@ -6,13 +6,20 @@ Version 0.0.4
 
 Lancaster is a dynamic reactive dataflow system
 
-You use Lancaster to construct topologies of connected processing
-nodes that consume and emit arbitrary JSON messages.
+You use Lancaster to construct topologies by adding, removing, and
+connecting together nodes. Each node has a fn (function) it applies to
+incoming messages and outputs the result.
 
-A worker process manages message processing.
+Node fns can run pretty much any node.js javascript to do things to
+the messages they receive. They have a data object persists between
+calls that they can read or write.
 
 Clients can access Lancaster either via a Javascript object (direct
-api access) or via a REST/Websocket application server.
+api access) or via REST and Websockets. The libraty contains an api
+server you can spin up when you need it.
+
+A separate worker process you control runs the node fn processing and
+message routing.
 
 
 ```javascript
@@ -280,7 +287,7 @@ grunt
 If you want to submit a pull request, please ensure it passes linting
 and tests first, and follows the existing coding style. Thanks!
 
-## Topology methods
+## API
 
 ```
 var Lancaster = require('lancaster');
@@ -319,7 +326,7 @@ Delete a given node
 ### `api.inject(id, data, done)`
 
 Inject a message to a given node. The messages is placed on the end of
-the inbound message queue, and will be processed by the worker when
+he inbound message queue, and will be processed by the worker when
 all messages in front of it have been processed.
 
 ### `api.extract(done)`
@@ -386,7 +393,34 @@ applied to a message, the output of that fn will be latched and
 available using `getData`.
 
 
-## Server REST methods
+### `api.listen([id])`
+
+Creates a listener on the topology that executes a callback on every
+message the topology emits.
+
+```javascript
+var handle = function(method, id, args){
+  // 
+};
+var listener = `api.listen(handle)`;
+```
+
+The following methods being executed will trigger the handler. The
+handler will be passed a method name, node_id and the arguments used
+to call the method.
+
+* add
+* del
+* inject
+* setData
+* setAttrs
+* delAttrs
+* addSource
+* delSource
+* delSources
+
+
+## REST Server
 
 ### `GET /`
 
@@ -491,6 +525,96 @@ Get message latched on node's output
 {message}
 ```
 
+## Websocket methods.
+
+Starting the REST server also make Websockets available.
+
+Websocket methods allow the client to write to the topology.
+
+Any changes on the topology are emitted to connected clients (an
+`#api.listener` is connected to the socket, with it's handler sending
+messages).
+
+Commands and emitted data map on to the javascript api. Send a
+javascript array containing the method name, then the arguments for
+the method.
+
+e.g.
+
+```
+["setAttrs", "my-node-id", {"my-value": 500}]
+```
+
+A client can alter a node by sending this message. When the message is
+processed, it will be emitted to all connected clients.
+
+Messages emitted by nodes are sent over websockets by `#setData`.
+
+```
+["setAttrs", "my-node-id", {"value": 123}]
+```
+
+The following commands are supported over websockets:
+
+* reset
+* add
+* del
+* inject
+* setData
+* setAttrs
+* delAttrs
+* addSource
+* delSource
+* delSources
+
+The reset command will issue as many `del`s are required to reset the
+topology.
+
+
+### Example Client
+
+```
+npm install ws
+```
+
+Connect to server
+
+```
+var Ws = require('ws');
+ws = new Ws('ws://' + config.server.host + ':' + config.server.port);
+```
+
+Receive messages
+
+``` 
+var handler = function(x){
+  x = JSON.parse(x);
+  var method = x[0];
+  var id = x[1];
+  var args = x[2];
+};
+ws.on('message', handler);
+```
+
+Send a command
+
+```
+var data = [
+  'setAttrs',
+  'my-node-id',
+  {'my-value': 500}
+ ];  
+var s = JSON.stringify(data);
+ws.send(s, function(){
+  // done
+});
+```
+
+Quit ws client
+
+```
+ws.terminate();
+```
 
 
 ## curl examples
