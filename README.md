@@ -56,8 +56,8 @@ emitter or Websockets.
 
 ## Quickstart
 
-Lancaster comes bundled with a runner that starts up a server and a
-worker. This is the easiest way to get going quickly.
+Lancaster has a runner that starts up a server and a worker. This is
+the easiest way to get moving fast.
 
 ```bash
 sudo apt-get install redis-server
@@ -79,7 +79,7 @@ You can use the `curl` examples at the bottom of this README to try it out.
 
 ## Installing
 
-Lancaster requires Redis.
+Lancaster needs Redis.
 
 ```bash
 sudo apt-get install redis-server
@@ -163,13 +163,20 @@ worker.start(function(){
 });
 ```
 
-Currently Lancaster only safely supports one singleton worker. If you
-are happy your messages can be processed in parallel without causing
+Currently Lancaster only safely supports having one worker. If you are
+happy your messages can be processed in parallel without causing
 issues, there is nothing stopping you running more than one, and this
 is a good way to scale up. If you are doing tasks like working out
 averages or counting things, then parallel workers are probably not a
 good idea.
 
+There are a couple of things that can be added later to improve this:
+
+* Have Lancaster run nodes in parallel, but ensure only one of any
+given node runs at a time. 
+
+* Extend the parallel runner to speficy if a given node can have
+multiple parallel instances, or must only ever have on running.
 
 ## Nodes
 
@@ -185,7 +192,7 @@ a `node` has a structure like this:
 ```
 
 `id` is arbitrary. You provide an ID when creating the node. Best to
-stick to a short (say , up to 32 characters) alphanumeric string.
+stick to a short (say up to 32 characters) alphanumeric string.
 
 `sources` is an array of other node id's that this node will receive
 messages from.
@@ -197,9 +204,9 @@ and is injected in to any listening nodes.
 
 `attrs` is an object for holding state. When the node is created, you
 can provide seed attrs to override defaults provided by the nodes's
-`fn`. `attrs` can be read and mutated by the node's `fn`. These attrs
-are persisted after the function application is completed on each
-message, so can be used to calculate running totals or store data
+`fn`. A node's `attrs` can be read and mutated by the it's `fn`. The
+attrs are persisted after the function application is completed on
+each message, so can be used to calculate running totals or store data
 across multiple messages.
 
 
@@ -249,7 +256,6 @@ the message to output, or if there is no message to output `undefined`
 (i.e. leave blank).
 
 
-```
 ## Hacking
 
 Clone the repo
@@ -295,105 +301,105 @@ var api = Lancaster.server();
 ```
 
 All api methods require a callback handler as their last argument.
-This handler will be passed an error and (if appropriate) a value.
+This will be passed an error and (if appropriate) a value.
 
-### `api.quit(done)`
+#### `api.quit(done)`
 
 Close the api client (disconnect from Redis) ready to exit.
 
-### `api.reset(done)`
+#### `api.reset(done)`
 
 Destroy everything in the topology
 
-### `api.add(node, done)`
+#### `api.add(node, done)`
 
 Add a node to the topology.
 
 Will callback with an error if the provided id already exists.
 
-### `api.get(id, done)`
+#### `api.get(id, done)`
 
 Get a JSON representation of a given node.
 
-### `api.all(done)`
+#### `api.all(done)`
 
 Get all nodes in the topology
 
-### `api.del(id, done)`
+#### `api.del(id, done)`
 
 Delete a given node
 
-### `api.inject(id, data, done)`
+#### `api.inject(id, data, done)`
 
 Inject a message to a given node. The messages is placed on the end of
 he inbound message queue, and will be processed by the worker when
 all messages in front of it have been processed.
 
-### `api.extract(done)`
+#### `api.extract(done)`
 
 Take a message off the front of the message queue. Internally this is
 used by the worker to get the next message to be processed. You
 probably don't need to use this method.
 
-### `api.attrs(id, [attrs,] done)`
+#### `api.attrs(id, [attrs,] done)`
 
 Convenience method to get attrs (`attrs('my-node-id')`) or set attrs
 (`attrs('my-node-id', {foo: 'bar'})`). Setting attrs completely
 replaces any existing attrs for the node.
 
-### `api.setAttrs(id, attrs, done)`
+#### `api.setAttrs(id, attrs, done)`
 
 Replace the `attrs` on a given node
 
-### `api.getAttrs(id, done)`
+#### `api.getAttrs(id, done)`
 
 Get the `attrs` object from a given node
 
 
-### `api.delAttrs(id, done)`
+#### `api.delAttrs(id, done)`
 
 Delete the attrs for a given node. Used internally when deleting a
 node. You probably don't want to use this.
 
-### `api.addSource(id, source_id, done)`
+#### `api.addSource(id, source_id, done)`
 
 Make a given node listen to another node. `id` will receive all
 messages output by `source_id`.
 
-### `api.delSource(id, source_id, done)`
+#### `api.delSource(id, source_id, done)`
 
 Disconnect `id` from listening to `source_id`
 
-### `api.getSources(id, done)`
+#### `api.getSources(id, done)`
 
 Get all the nodes that `id` is listening to.
 
-### `api.setSources(id, sources, done)`
+#### `api.setSources(id, sources, done)`
 
 Replace any existing sources `id` has with the provided source ids.
 
-### `api.delSources(id, done) `
+#### `api.delSources(id, done) `
 
 Disconnect `id` from all nodes it's listening to.
 
-### `api.getTargets(id, done)`
+#### `api.getTargets(id, done)`
 
 Get the nodes that are listening to `id`
 
-### `api.setData(id, data, done)`
+#### `api.setData(id, data, done)`
 
 Latch a message to the output of a node (does not distribute the
 message). Used internally by worker. You probably don't want to use
 this method.
 
-### `api.getData(id, done)`
+#### `api.getData(id, done)`
 
 The the last message (if any) output by `id`. Then the node's `fn` is
 applied to a message, the output of that fn will be latched and
 available using `getData`.
 
 
-### `api.listen([id])`
+#### `api.listen([id])`
 
 Creates a listener on the topology that executes a callback on every
 message the topology emits.
@@ -422,7 +428,7 @@ to call the method.
 
 ## REST Server
 
-### `GET /`
+#### `GET /`
 
 Get server config
 
@@ -430,7 +436,7 @@ Get server config
 {"lancaster":{"prefix":"df","env":"development","redis":{"host":"127.0.0.1","port":6379},"server":{"host":"127.0.0.1","port":4002}}}
 ```
 
-### `GET /status`
+#### `GET /status`
 
 Get server status
 
@@ -439,7 +445,7 @@ Get server status
 ```
 
 
-### `GET /ping`
+#### `GET /ping`
 
 Ping test to check server is up
 
@@ -448,12 +454,12 @@ Ping test to check server is up
 ```
 
 
-### `POST /reset`
+#### `POST /reset`
 
 Restore the topology to a pristine state (no nodes)
 
 
-### `GET /nodes`
+#### `GET /nodes`
 
 Get all nodes in the Topology
 
@@ -462,7 +468,7 @@ Get all nodes in the Topology
 ```
 
 
-### `GET /nodes/:id`
+#### `GET /nodes/:id`
 
 Get a specific node
 
@@ -471,7 +477,7 @@ Get a specific node
 ```
 
 
-### `POST /nodes`
+#### `POST /nodes`
 
 Add a node to topology
 
@@ -491,7 +497,7 @@ used for attrs. Attrs will be used by the fn to control it's
 operation.
 
 
-### `POST /nodes/:id`
+#### `POST /nodes/:id`
 
 Change attrs on a node. Cannot change `id`, `sources` or `fn`
 
@@ -503,7 +509,7 @@ Change attrs on a node. Cannot change `id`, `sources` or `fn`
 }
 ```
 
-### `POST /nodes/:id/message`
+#### `POST /nodes/:id/message`
 
 Inject a message in to a node
 
@@ -511,13 +517,13 @@ Inject a message in to a node
 {message}
 ```
 
-### `DELETE /nodes/:id`
+#### `DELETE /nodes/:id`
 
 Delete a specific node
 
 
 
-### `GET /nodes/:id/message`
+#### `GET /nodes/:id/message`
 
 Get message latched on node's output
 
@@ -664,7 +670,9 @@ curl -i -X GET http://localhost:4002/ping
 ```
 
 
-Reset the topology (delete everything)
+Reset 
+
+Rest the topology (delete everything)
 
 ```
 curl -i -X POST http://localhost:4002/reset
