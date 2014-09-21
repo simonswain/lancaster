@@ -405,7 +405,7 @@ message the topology emits.
 
 ```javascript
 var handle = function(method, id, args){
-  // 
+  // do stuff
 };
 var listener = api.listen(handle);
 ```
