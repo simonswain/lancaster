@@ -30,14 +30,15 @@
   "dependencies": {
     "async": "^0.9.0",
     "grunt": "^0.4.5",
+    "handlebars": "^2.0.0",
     "hapi": "^6.8.1",
+    "hapi-less": "^0.1.1",
     "hiredis": "^0.1.17",
     "padder": "0.0.1",
+    "path": "^0.4.9",
     "redis": "^0.12.1",
     "underscore": "^1.7.0",
-    "ws": "^0.4.32",
-    "handlebars": "^2.0.0",
-    "path": "^0.4.9"
+    "ws": "^0.4.32"
   },
   "devDependencies": {
     "grunt-contrib-jshint": "^0.10.0",
