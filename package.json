@@ -35,7 +35,9 @@
     "padder": "0.0.1",
     "redis": "^0.12.1",
     "underscore": "^1.7.0",
-    "ws": "^0.4.32"
+    "ws": "^0.4.32",
+    "handlebars": "^2.0.0",
+    "path": "^0.4.9"
   },
   "devDependencies": {
     "grunt-contrib-jshint": "^0.10.0",

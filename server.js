@@ -1,6 +1,6 @@
 var config = require('./config.js');
 
-var Lancaster = require('./index.js');
+var Lancaster = require('./lib');
 var server = Lancaster.server(config);
 
 // handle shutdown gracefully
@@ -15,6 +15,7 @@ process.on( 'SIGINT', function() {
 
 server.start(function(){
   if(config.env === 'development'){
+    console.log(JSON.stringify({lancaster:config}));
     //console.log(JSON.stringify(config, null, 2));
   }
 });
