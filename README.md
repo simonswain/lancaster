@@ -285,7 +285,6 @@ Run lint and tests
 git clone https://github.com/simonswain/lancaster.git
 cd lancaster
 npm install
-cd lancaster
 
 grunt
 ```
