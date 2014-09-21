@@ -491,7 +491,7 @@ Add a node to topology
 }
 ```
 
-The `id, `fn` and `sources` keys are reserved. Any other keys can be
+The `id`, `fn` and `sources` keys are reserved. Any other keys can be
 used for attrs. Attrs will be used by the fn to control it's
 operation.
 
