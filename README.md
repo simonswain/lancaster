@@ -463,7 +463,7 @@ Restore the topology to a pristine state (no nodes)
 Get all nodes in the Topology
 
 ```
-'id': {node}, ...}
+{'id': {node}, ...}
 ```
 
 
