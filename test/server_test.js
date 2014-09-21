@@ -41,7 +41,7 @@ exports.server = {
     test.expect(2);
     http.get(
       test,
-      '',       
+      'api',       
       function(res) {
         test.ok(res.data.hasOwnProperty('lancaster'));
         test.done();
