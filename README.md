@@ -408,7 +408,7 @@ message the topology emits.
 var handle = function(method, id, args){
   // 
 };
-var listener = `api.listen(handle)`;
+var listener = api.listen(handle);
 ```
 
 The following methods being executed will trigger the handler. The
