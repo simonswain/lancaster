@@ -1,3 +1,8 @@
+move x,y in to top level of node
+zoom from center
+connect via gui
+default view fit to screen
+
 //Nodes created/destroyed for each message. Pull attrs from redis,
 save back when done
 
