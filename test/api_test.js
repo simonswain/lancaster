@@ -1,7 +1,9 @@
 "use strict";
 
 var async = require('async');
-var api = require('../lib').api();
+
+var config = require('../config.sample.js')(process.env.NODE_ENV);
+var api = require('../lib').api(config);
 
 var myNode, myData, myId;
 

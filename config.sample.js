@@ -1,34 +1,38 @@
-var env = process.env.NODE_ENV || 'development';
+module.exports = function(env){
 
-var prefix = 'df';
+  var env = process.env.NODE_ENV || 'development';
 
-var redis = {
-  host: '127.0.0.1',
-  port: 6379,
-};
+  var prefix = 'df';
 
-var server = {
-  host: '127.0.0.1',
-  port: 4002
-};
+  var redis = {
+    host: '127.0.0.1',
+    port: 6379,
+  };
 
-switch ( env ) {
-case 'test' :
-  server.port = 4003;
-  break;
+  var server = {
+    host: '127.0.0.1',
+    port: 4002
+  };
 
-case 'development' :
-  server.port = 4002;
-  break;
+  switch ( env ) {
+  case 'test' :
+    server.port = 4003;
+    break;
 
-case 'production' :
-  server.port = 4001;
-  break;
-}
+  case 'development' :
+    server.port = 4002;
+    break;
 
-module.exports = {
-  prefix: prefix,
-  env: env,
-  redis: redis,
-  server: server
+  case 'production' :
+    server.port = 4001;
+    break;
+  }
+
+  return {
+    prefix: prefix,
+    env: env,
+    redis: redis,
+    server: server
+  };
+
 };

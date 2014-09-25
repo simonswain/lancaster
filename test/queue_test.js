@@ -2,7 +2,7 @@
 
 var async = require('async');
 
-var config = require('../config.sample.js');
+var config = require('../config.sample.js')(process.env.NODE_ENV);
 var Lancaster = require('../index.js');
 
 var api;
