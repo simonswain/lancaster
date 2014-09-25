@@ -11,11 +11,11 @@ module.exports = function(grunt) {
     },
     jshint: {
       files: [
-        'Gruntfile.js', 
-        'config.samples.js', 
-        'index.js', 
-        'lib/*.js', 
-        'lib/server/public/js/**/*.js', 
+        'Gruntfile.js',
+        'config.sample.js',
+        'index.js',
+        'lib/*.js',
+        'lib/server/public/js/**/*.js',
         'test/**/*.js'
       ],
       options: {
