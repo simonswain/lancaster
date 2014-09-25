@@ -6,4 +6,6 @@
  * Licensed under the MIT license.
  */
 
+"use strict";
+
 module.exports = require('./lib');
