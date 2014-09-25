@@ -97,7 +97,6 @@ exports.server = {
 
   'create-node': function(test) {
     test.expect(4);
-
     http.post(
       test,
       'nodes', {
@@ -118,7 +117,6 @@ exports.server = {
             test.done();
           });
       });
-
   },
 
   'create-dup-node': function(test) {
@@ -149,8 +147,46 @@ exports.server = {
       });
   },
 
-  'delete-node': function(test) {
+  'update-node': function(test) {
+    test.expect(4);
+    http.put(
+      test,
+      'nodes/test-node', {
+        data:{
+          'x': 100,
+          'y': 100
+        }
+      }, {
+        status: 200
+      }, function(res) {
 
+        // inpsect to check nodes were created
+        http.get(
+          test,
+          'nodes/test-node',
+          function(res) {
+            test.equal(typeof res.data, 'object');
+            test.equals(res.data.id, 'test-node');
+            test.done();
+          });
+      });
+  },
+
+  'check-update': function(test) {
+    test.expect(3);
+    http.get(
+      test,
+      'nodes/test-node',
+      {}, {
+      }, function(res) {
+        test.equals(res.data.x, '100');
+        test.equals(res.data.y, '100');
+        test.done();
+      });
+  },
+
+
+  'delete-node': function(test) {
     test.expect(2);
     http.del(
       test,
@@ -239,7 +275,7 @@ exports.server = {
     test.expect(4);
     http.post(
       test,
-      'nodes/test-attrs',
+      'nodes/test-attrs/attrs',
       {data: {'my-value': 1000}},
       function(res) {
         
