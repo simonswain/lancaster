@@ -1,6 +1,6 @@
 module.exports = function(env){
 
-  var env = process.env.NODE_ENV || 'development';
+  env = process.env.NODE_ENV || 'development';
 
   var prefix = 'df:' + env;
 
