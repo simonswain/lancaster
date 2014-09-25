@@ -43,7 +43,7 @@ exports.listener = {
 
   'api-tick': function(test) {
     var listener;
-    //test.expect(1);
+    test.expect(3);
     var handle = function(method, id, args){
       test.equals(method, 'setData');
       test.equals(id, myNode.id);
