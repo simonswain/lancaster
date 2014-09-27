@@ -170,7 +170,9 @@ exports.api = {
   },
 
   'set-with-sources': function(test) {
+
     test.expect(3);
+
     myNode = {
       'id': 'test-sources',
       'sources': ['input', 'another']
@@ -185,7 +187,6 @@ exports.api = {
             test.equals(node.id, myNode.id);
             test.ok(node.sources.indexOf(myNode.sources[0]) > -1);
             test.ok(node.sources.indexOf(myNode.sources[1]) > -1);
-
             test.done();
           });
         
