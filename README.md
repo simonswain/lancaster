@@ -6,6 +6,9 @@ Version 0.0.4
 
 Lancaster is a dynamic reactive dataflow system
 
+It can be used as a node library, a REST/Websocket server, or via the
+included web gui that lets you visually create and connect nodes.
+
 You use Lancaster to construct topologies by adding, removing, and
 connecting together nodes. Each node has a fn (function) it applies to
 incoming messages and outputs the result.
@@ -15,7 +18,7 @@ the messages they receive. They have a data object persists between
 calls that they can read or write.
 
 Clients can access Lancaster either via a Javascript object (direct
-api access) or via REST and Websockets. The libraty contains an api
+api access) or via REST and Websockets. The library contains an api
 server you can spin up when you need it.
 
 A separate worker process you control runs the node fn processing and
