@@ -148,7 +148,7 @@ http access.
 
 ## Worker
 
-The api and server as passive -- they modify the topology and
+The api and server are passive -- they modify the topology and
 inject/receive messages.
 
 The Worker is a long-running process that does the actual work of
