@@ -16,7 +16,9 @@ module.exports = function(grunt) {
         'index.js',
         'lib/*.js',
         'lib/server/public/js/**/*.js',
-        'test/**/*.js'
+        'test/**/*.js',
+        'server.js'
+
       ],
       options: {
         curly: true,
