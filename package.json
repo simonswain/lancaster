@@ -33,7 +33,6 @@
     "handlebars": "^2.0.0",
     "hapi": "^6.8.1",
     "hapi-less": "^0.1.1",
-    "hiredis": "^0.1.17",
     "padder": "0.0.1",
     "path": "^0.4.9",
     "redis": "^0.12.1",
